@@ -297,33 +297,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
     scene.add(bottleGroup);
 
-    // F. Dark Mirror Pedestal Base
-    const pedestalGeo = new THREE.CylinderGeometry(2.3, 2.4, 0.16, 64);
-    const pedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x020305,
-      roughness: 0.04,
-      metalness: 0.95,
-      envMapIntensity: 1.2,
-    });
-    const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestalMesh.position.y = -2.15;
-    pedestalMesh.receiveShadow = true;
-    scene.add(pedestalMesh);
-
-    // Soft Contact Shadow
-    const shadowGeo = new THREE.RingGeometry(0.1, 2.2, 32);
-    const shadowMat = new THREE.MeshBasicMaterial({
-      color: 0x000000,
-      transparent: true,
-      opacity: 0.8,
-      side: THREE.DoubleSide,
-    });
-    const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
-    shadowMesh.rotation.x = Math.PI / 2;
-    shadowMesh.position.y = pedestalMesh.position.y + 0.085;
-    scene.add(shadowMesh);
-
-    // 6. Smooth Mouse/Touch Drag Controls (Zero Wheel Hijacking)
+    // 6. Smooth Mouse/Touch Drag Controls (Zero Disk Pedestal)
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
@@ -381,7 +355,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 7. Render Loop (Smooth Auto-Rotation & Hover Damping)
+    // 7. Render Loop (Floating 3D Bottle)
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
