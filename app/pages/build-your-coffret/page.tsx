@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+
+
 import { PRODUCTS, Product } from '@/lib/products';
 import { useAppStore } from '@/lib/store';
 
@@ -75,7 +75,7 @@ export default function AIAtelierPage() {
 
   return (
     <div className="min-h-screen bg-[var(--noir)] text-[var(--blanc-pur)] selection:bg-[var(--rouge)] selection:text-white">
-      <Navbar />
+      
 
       <main className="pt-44 pb-24 px-6 md:px-16 max-w-[1280px] mx-auto">
         {/* Header Title */}
@@ -281,7 +281,7 @@ export default function AIAtelierPage() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

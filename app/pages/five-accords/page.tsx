@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { useAppStore } from '@/lib/store';
 import { PRODUCTS, Product } from '@/lib/products';
 import { Volume2, VolumeX, Lock } from 'lucide-react';
@@ -134,9 +132,6 @@ export default function FiveAccordsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--noir)] text-[var(--blanc-pur)] selection:bg-[var(--rouge)] selection:text-white flex flex-col justify-between relative overflow-hidden">
-      {/* Top Header */}
-      <Navbar />
-
       {/* Auxiliary Top Bar Sub-Menu */}
       <div className="fixed top-[64px] left-0 right-0 z-40 bg-black/40 backdrop-blur-md border-b border-[rgba(255,255,255,0.08)] py-2 px-6 md:px-16 flex items-center justify-between text-xs type-micro">
         <div className="flex items-center gap-6 text-gray-400 overflow-x-auto">
@@ -173,7 +168,7 @@ export default function FiveAccordsPage() {
 
       {/* Main Interactive Stage with Dynamic Backdrop Radial Gradient */}
       <main
-        className="flex-1 pt-32 pb-36 px-6 md:px-16 flex items-center justify-center relative transition-all duration-700 ease-out min-h-[90vh]"
+        className="flex-1 pt-32 pb-36 px-6 md:px-16 flex items-center justify-center relative transition-all duration-700 ease-out min-h-[85vh]"
         style={{ background: activeAccord.bgGradient }}
       >
         <div className="max-w-[1280px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -283,8 +278,6 @@ export default function FiveAccordsPage() {
           );
         })}
       </div>
-
-      <Footer />
     </div>
   );
 }

@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { NotePyramid } from '@/components/NotePyramid';
 import { PRODUCTS, getProductByHandle, Product } from '@/lib/products';
 import { useAppStore } from '@/lib/store';
@@ -43,8 +41,6 @@ export default function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-[var(--noir)] text-[var(--blanc-pur)] selection:bg-[var(--rouge)] selection:text-white">
-      <Navbar />
-
       <main className="pt-32 pb-24 px-6 md:px-16 max-w-[1280px] mx-auto">
         {/* Breadcrumbs */}
         <div className="type-micro text-gray-400 mb-8 flex items-center gap-2">
@@ -209,8 +205,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
