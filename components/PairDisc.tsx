@@ -5,7 +5,7 @@ import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 
 export const PairDisc: React.FC = () => {
   return (
-    <div className="w-full py-24 bg-black text-[var(--blanc-pur)] overflow-hidden border-t border-[rgba(255,255,255,0.1)]">
+    <div className="w-full py-24 bg-[#0B0D14] text-[var(--blanc-pur)] overflow-hidden border-t border-[rgba(255,255,255,0.1)]">
       <div className="max-w-[1280px] mx-auto px-6 md:px-16">
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
@@ -24,8 +24,11 @@ export const PairDisc: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Model Stage Container - Pure Jet Black Stage */}
-        <div className="w-full h-[540px] md:h-[620px] bg-black relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
+        {/* 3D Model Stage Container - Refined Light-Black Charcoal Background with Soft Radial Glow */}
+        <div className="w-full h-[540px] md:h-[620px] bg-[#0B0D14] relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
+          {/* Subtle Soft Radial Charcoal Center Glow for High contrast obsidian bottle silhouette */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#181D2D_0%,_#0B0D14_75%)] pointer-events-none" />
+
           {/* Top-Left Header Badge */}
           <div className="absolute top-6 left-6 z-10 pointer-events-none space-y-1">
             <div className="flex items-center gap-2">
