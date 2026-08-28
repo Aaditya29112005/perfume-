@@ -297,12 +297,29 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
     scene.add(bottleGroup);
 
-    // 6. Smooth Mouse/Touch Drag Controls (Zero Disk Pedestal)
+    // 6. Page Scroll-Driven 3D Model Rotation & Drag Controls
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
     let targetRotationY = 0;
     let targetRotationX = 0;
+    let scrollRotationY = 0;
+
+    const handleScroll = () => {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const windowHeight = window.innerHeight || 800;
+
+      // Progress as section passes through viewport
+      const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+      const clampedProgress = Math.max(0, Math.min(1, progress));
+
+      // Rotate model dynamically from -0.5 to +1.2 radians as user scrolls down the page
+      scrollRotationY = (clampedProgress - 0.45) * Math.PI * 1.5;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
     const handleMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -355,12 +372,12 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 7. Render Loop (Floating 3D Bottle)
+    // 7. Render Loop (Page Scroll Driven Rotation + Hover Float)
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       if (!isDragging) {
-        targetRotationY += 0.005;
+        targetRotationY = scrollRotationY;
         targetRotationX *= 0.95;
       }
 
@@ -381,6 +398,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      handleScroll();
     };
 
     window.addEventListener('resize', handleResize);
@@ -388,6 +406,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
       container.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
