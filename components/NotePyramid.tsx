@@ -47,24 +47,24 @@ export const NotePyramid: React.FC<NotePyramidProps> = ({
   ];
 
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-3 border ${borderColor} ${className}`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-3 border ${borderColor} rounded-none overflow-hidden ${className}`}>
       {items.map((item, idx) => (
         <div
           key={idx}
-          className={`p-6 flex flex-col justify-between ${
-            idx < 2 ? `border-b md:border-b-0 md:border-r ${borderColor}` : ''
+          className={`p-4 sm:p-5 flex flex-col justify-between overflow-hidden ${
+            idx < 2 ? `border-b sm:border-b-0 sm:border-r ${borderColor}` : ''
           }`}
         >
-          <div>
-            <div className={`type-micro ${labelColor} mb-2`}>
+          <div className="space-y-1.5">
+            <div className={`type-micro text-[10px] md:text-xs uppercase tracking-widest ${labelColor}`}>
               {item.code} · {item.eng}
             </div>
-            <div className={`type-product text-xl md:text-2xl ${valColor} font-bold tracking-widest`}>
+            <div className={`text-sm sm:text-base font-extrabold uppercase tracking-wider leading-snug break-words ${valColor}`}>
               {item.val}
             </div>
           </div>
           {item.desc && (
-            <p className={`type-body text-xs mt-3 ${labelColor} max-w-none`}>
+            <p className={`type-body text-xs mt-3 leading-relaxed ${labelColor} max-w-none`}>
               {item.desc}
             </p>
           )}
