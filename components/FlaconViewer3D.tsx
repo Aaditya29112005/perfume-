@@ -34,9 +34,9 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, 0.2, 8.5);
+    camera.position.set(0, 0.15, 8.5);
 
-    // 2. WebGL Renderer Setup with High Fidelity Tone Mapping
+    // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(containerWidth, containerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -55,8 +55,8 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     if (envCtx) {
       const grad = envCtx.createLinearGradient(0, 0, 0, 256);
       grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.3, '#888899');
-      grad.addColorStop(0.7, '#111118');
+      grad.addColorStop(0.3, '#777788');
+      grad.addColorStop(0.7, '#111116');
       grad.addColorStop(1, '#050508');
       envCtx.fillStyle = grad;
       envCtx.fillRect(0, 0, 512, 256);
@@ -64,18 +64,18 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       // Studio softbox highlights for sphere cap reflection
       envCtx.fillStyle = '#ffffff';
       envCtx.beginPath();
-      envCtx.ellipse(380, 70, 70, 35, -Math.PI / 6, 0, Math.PI * 2);
+      envCtx.ellipse(380, 70, 75, 38, -Math.PI / 6, 0, Math.PI * 2);
       envCtx.fill();
 
       envCtx.beginPath();
-      envCtx.ellipse(120, 90, 50, 25, Math.PI / 6, 0, Math.PI * 2);
+      envCtx.ellipse(120, 90, 55, 28, Math.PI / 6, 0, Math.PI * 2);
       envCtx.fill();
     }
     const envTexture = new THREE.CanvasTexture(envCanvas);
     envTexture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = envTexture;
 
-    // 4. Studio Multi-directional Lighting Setup
+    // 4. Studio Multi-directional Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
@@ -88,7 +88,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
-    // Silver Specular Rim Light (Back Left)
+    // Specular Rim Light (Back Left)
     const rimLight = new THREE.DirectionalLight(0xe0e8ff, 2.5);
     rimLight.position.set(-5, 5, -4);
     scene.add(rimLight);
@@ -101,10 +101,10 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     // 5. Build 3D Flacon Master Group
     const bottleGroup = new THREE.Group();
 
-    // Dimensional proportions based on oad50.png flacon spec
-    const bodyWidth = 1.95;
-    const bodyHeight = 2.45;
-    const bodyDepth = 0.82;
+    // Exact proportions to fit the body of oad50.png
+    const bodyWidth = 2.0;
+    const bodyHeight = 2.7;
+    const bodyDepth = 0.85;
     const cornerRadius = 0.08;
 
     // A. Extruded Rounded Rectangular Glass Body
@@ -148,7 +148,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     });
 
     const bodyMesh = new THREE.Mesh(bodyGeo, obsidianGlassMaterial);
-    bodyMesh.position.y = -0.45;
+    bodyMesh.position.y = -0.5;
     bodyMesh.castShadow = true;
     bodyMesh.receiveShadow = true;
     bottleGroup.add(bodyMesh);
@@ -170,93 +170,9 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     capMesh.castShadow = true;
     bottleGroup.add(capMesh);
 
-    // D. Extract Clean Title for Front & Back Labels
-    const extractNameFromAlt = (alt: string) => {
-      if (alt.includes('On A Date') || alt.includes('ON A DATE')) return 'ON A DATE';
-      if (alt.includes('Heritage Oud') || alt.includes('HERITAGE OUD')) return 'HERITAGE OUD';
-      if (alt.includes('Tobacco') || alt.includes('TOBACCO')) return 'TOBACCO & WHISKEY';
-      if (alt.includes('Pure Nuit') || alt.includes('PURE NUIT')) return 'PURE NUIT';
-      if (alt.includes('Oud Rouge') || alt.includes('OUD ROUGE')) return 'OUD ROUGE';
-      return alt.toUpperCase().replace('3D FLACON', '').trim() || 'ON A DATE';
-    };
-    const titleText = extractNameFromAlt(altText);
-
-    // E. Create High-Resolution Front Label Canvas Texture (2048 x 2048)
-    const createFrontLabelCanvas = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 2048;
-      canvas.height = 2048;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return canvas;
-
-      // Transparent Background (Text printed directly on black bottle face)
-      ctx.clearRect(0, 0, 2048, 2048);
-
-      ctx.fillStyle = '#FFFFFF';
-      ctx.textAlign = 'center';
-
-      // 1. Brand Name: FRASMETICS
-      ctx.font = '900 130px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '14px';
-      ctx.fillText('FRASMETICS', 1024, 520);
-
-      // 2. Sub-brand: FRANCE
-      ctx.font = '600 52px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '20px';
-      ctx.fillText('F R A N C E', 1024, 620);
-
-      // 3. Product Title: ON A DATE
-      ctx.font = '900 150px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '8px';
-      ctx.fillText(titleText, 1024, 940);
-
-      // 4. Volume / Concentration Bar
-      ctx.font = '700 44px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '4px';
-      ctx.textAlign = 'left';
-      ctx.fillText('EAU DE PARFUM', 260, 1140);
-
-      ctx.textAlign = 'right';
-      ctx.fillText('50ML / 1.7 FL.OZ.', 1788, 1140);
-
-      // 5. Gender / Line Divider ——— MAN ———
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(260, 1220);
-      ctx.lineTo(820, 1220);
-      ctx.stroke();
-
-      ctx.font = '700 40px "Inter", "Helvetica Neue", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.letterSpacing = '10px';
-      ctx.fillText('MAN', 1024, 1232);
-
-      ctx.beginPath();
-      ctx.moveTo(1228, 1220);
-      ctx.lineTo(1788, 1220);
-      ctx.stroke();
-
-      // 6. Manifesto lines
-      ctx.font = '700 38px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '4px';
-      ctx.fillText('FRASMETICS CRAFTS NICHE FRAGRANCES.', 1024, 1370);
-
-      ctx.font = '600 34px "Inter", "Helvetica Neue", sans-serif';
-      ctx.letterSpacing = '4px';
-      ctx.fillText('MODERN ARTISTRY. TIMELESS LUXURY.', 1024, 1435);
-
-      return canvas;
-    };
-
-    const frontTexture = new THREE.CanvasTexture(createFrontLabelCanvas());
-    frontTexture.colorSpace = THREE.SRGBColorSpace;
-    frontTexture.needsUpdate = true;
-
-    // Front Label Plane (Flush with front face of bottle body)
-    const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.92, bodyHeight * 0.92);
+    // D. Load & Crop original PNG image (e.g., oad50.png) for authentic front face fitting
+    const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.96, bodyHeight * 0.96);
     const frontPlaneMat = new THREE.MeshBasicMaterial({
-      map: frontTexture,
       transparent: true,
       depthWrite: false,
       polygonOffset: true,
@@ -267,7 +183,45 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     frontPlaneMesh.position.set(0, bodyMesh.position.y, bodyDepth / 2 + 0.032);
     bottleGroup.add(frontPlaneMesh);
 
-    // F. Create High-Resolution Back Label Canvas Texture (2048 x 2048)
+    // Load actual image from imageSrc (e.g. oad50.png) and crop body region automatically
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imageSrc;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      
+      // Calculate crop area: if full bottle PNG (like oad50.png with ratio > 1.5), crop lower 65% containing bottle body
+      const isFullBottle = img.height / img.width > 1.4;
+      const cropYStart = isFullBottle ? Math.floor(img.height * 0.34) : 0;
+      const cropHeight = img.height - cropYStart;
+
+      canvas.height = cropHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        // Draw cropped body portion from actual image file
+        ctx.drawImage(img, 0, cropYStart, img.width, cropHeight, 0, 0, img.width, cropHeight);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.needsUpdate = true;
+        frontPlaneMat.map = tex;
+        frontPlaneMat.needsUpdate = true;
+      }
+    };
+
+    // E. Extract Clean Title for Back Label
+    const extractNameFromAlt = (alt: string) => {
+      if (alt.includes('On A Date') || alt.includes('ON A DATE')) return 'ON A DATE';
+      if (alt.includes('Heritage Oud') || alt.includes('HERITAGE OUD')) return 'HERITAGE OUD';
+      if (alt.includes('Tobacco') || alt.includes('TOBACCO')) return 'TOBACCO & WHISKEY';
+      if (alt.includes('Pure Nuit') || alt.includes('PURE NUIT')) return 'PURE NUIT';
+      if (alt.includes('Oud Rouge') || alt.includes('OUD ROUGE')) return 'OUD ROUGE';
+      return alt.toUpperCase().replace('3D FLACON', '').trim() || 'ON A DATE';
+    };
+    const titleText = extractNameFromAlt(altText);
+
+    // F. Create High-Resolution Back Label Canvas Texture (2048 x 2048) for 180° Back View
     const createBackLabelCanvas = () => {
       const canvas = document.createElement('canvas');
       canvas.width = 2048;
