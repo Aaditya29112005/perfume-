@@ -82,6 +82,12 @@ export const Navbar: React.FC = () => {
               ACCORDS
             </Link>
             <Link
+              href="/five-accords"
+              className="hidden md:inline type-micro text-[var(--rouge)] font-bold hover:opacity-85 transition-opacity"
+            >
+              FIVE ACCORDS
+            </Link>
+            <Link
               href="/pages/la-maison"
               className="hidden md:inline type-micro hover:text-[var(--rouge)] transition-colors"
             >
@@ -89,9 +95,9 @@ export const Navbar: React.FC = () => {
             </Link>
             <Link
               href="/pages/build-your-coffret"
-              className="hidden md:flex items-center gap-1.5 type-micro text-[var(--rouge)] hover:opacity-80 transition-opacity font-bold"
+              className="hidden md:flex items-center gap-1.5 type-micro text-gray-300 hover:text-white transition-colors font-bold"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-[var(--rouge)]" />
               <span>AI L&apos;ATELIER</span>
             </Link>
             <Link
@@ -137,13 +143,20 @@ export const Navbar: React.FC = () => {
             />
           </div>
 
-          <nav className="flex flex-col gap-8 type-section text-2xl my-auto">
+          <nav className="flex flex-col gap-6 type-section text-2xl my-auto">
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
               className="hover:text-[var(--rouge)] transition-colors"
             >
               HOMEPAGE
+            </Link>
+            <Link
+              href="/five-accords"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-[var(--rouge)] font-extrabold tracking-wider uppercase"
+            >
+              FIVE ACCORDS STAGE
             </Link>
             <Link
               href="/collections/all"
@@ -162,9 +175,9 @@ export const Navbar: React.FC = () => {
             <Link
               href="/pages/build-your-coffret"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-[var(--rouge)] font-bold flex items-center gap-2"
+              className="text-gray-300 font-bold flex items-center gap-2"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-5 h-5 text-[var(--rouge)]" />
               <span>AI L&apos;ATELIER</span>
             </Link>
             <Link
@@ -183,7 +196,7 @@ export const Navbar: React.FC = () => {
         </div>
       )}
 
-      {/* Marquee Animation Keyframes in inline style */}
+      {/* Marquee Animation Keyframes */}
       <style jsx global>{`
         @keyframes marquee {
           0% { transform: translateX(0%); }
