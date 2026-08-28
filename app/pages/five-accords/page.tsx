@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useAppStore } from '@/lib/store';
 import { PRODUCTS, Product } from '@/lib/products';
 import { Volume2, VolumeX, Lock } from 'lucide-react';
@@ -132,18 +131,13 @@ export default function FiveAccordsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--noir)] text-[var(--blanc-pur)] selection:bg-[var(--rouge)] selection:text-white flex flex-col justify-between relative overflow-hidden">
-      {/* Auxiliary Top Bar Sub-Menu */}
-      <div className="fixed top-[64px] left-0 right-0 z-40 bg-black/40 backdrop-blur-md border-b border-[rgba(255,255,255,0.08)] py-2 px-6 md:px-16 flex items-center justify-between text-xs type-micro">
-        <div className="flex items-center gap-6 text-gray-400 overflow-x-auto">
-          <Link href="/" className="hover:text-white transition-colors">HOME</Link>
-          <Link href="/collections/all" className="hover:text-white transition-colors">COLLECTION</Link>
-          <span className="text-[var(--rouge)] font-bold border-b border-[var(--rouge)] pb-0.5">FIVE ACCORDS</span>
-          <Link href="/pages/build-your-coffret" className="hover:text-white transition-colors">STUDIO</Link>
-          <Link href="/pages/la-maison" className="hover:text-white transition-colors">PYRAMID</Link>
-          <Link href="/pages/le-cercle" className="hover:text-white transition-colors font-bold text-[var(--rouge)]">LE CERCLE</Link>
-        </div>
-
-        <div className="flex items-center gap-4 text-gray-300">
+      {/* Main Interactive Stage with Dynamic Backdrop Radial Gradient */}
+      <main
+        className="flex-1 pt-36 md:pt-40 pb-36 px-6 md:px-16 flex items-center justify-center relative transition-all duration-700 ease-out min-h-[85vh]"
+        style={{ background: activeAccord.bgGradient }}
+      >
+        {/* Top-Right Auxiliary Controls (Sound Toggle & Currency Selector) */}
+        <div className="absolute top-32 right-6 md:right-16 z-20 flex items-center gap-4 text-xs type-micro text-gray-300 bg-black/50 backdrop-blur-md px-4 py-2 border border-white/10 shadow-lg">
           <button
             onClick={() => setIsSoundOn(!isSoundOn)}
             className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer bg-transparent border-0"
@@ -164,13 +158,7 @@ export default function FiveAccordsPage() {
             <option value="GBP (£)" className="bg-black text-white">GBP (£)</option>
           </select>
         </div>
-      </div>
 
-      {/* Main Interactive Stage with Dynamic Backdrop Radial Gradient */}
-      <main
-        className="flex-1 pt-32 pb-36 px-6 md:px-16 flex items-center justify-center relative transition-all duration-700 ease-out min-h-[85vh]"
-        style={{ background: activeAccord.bgGradient }}
-      >
         <div className="max-w-[1280px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Column: Accord Info & Olfactory Notes */}
