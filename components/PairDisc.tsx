@@ -24,8 +24,11 @@ export const PairDisc: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Model Stage Container - Seamless Borderless Dark Stage */}
-        <div className="w-full h-[540px] md:h-[620px] bg-[#030407] relative overflow-hidden flex items-center justify-center p-6 shadow-2xl border-none outline-none">
+        {/* 3D Model Stage Container - Seamlessly Merged with Background & Soft Radial Spotlight */}
+        <div className="w-full h-[540px] md:h-[620px] bg-[var(--noir)] relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
+          {/* Soft Radial Ambient Spotlight Merging Box into Background */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(30,50,90,0.35)_0%,_rgba(7,11,24,1)_70%)] pointer-events-none" />
+
           {/* Top-Left Header Badge */}
           <div className="absolute top-6 left-6 z-10 pointer-events-none space-y-1">
             <div className="flex items-center gap-2">
