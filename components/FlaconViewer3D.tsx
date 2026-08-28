@@ -31,10 +31,10 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const containerWidth = container.clientWidth || 500;
     const containerHeight = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup (Gives 100% Comfortable Headroom so Cap & Base Never Clip)
+    // 1. Scene & Camera Setup (Distance Z=11.5 & Y=-0.5 for generous 100% full bottle visibility without top clipping)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, -0.25, 8.8);
+    const camera = new THREE.PerspectiveCamera(28, containerWidth / containerHeight, 0.1, 1000);
+    camera.position.set(0, -0.4, 11.2);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
