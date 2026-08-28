@@ -24,8 +24,8 @@ export const PairDisc: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Model Stage Container - Deep Moody Dark Slate Background */}
-        <div className="w-full h-[540px] md:h-[620px] bg-[#05060A] relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
+        {/* 3D Model Stage Container - Deep Moody Dark Slate Stage (Expanded Height & Prominent Model Fit) */}
+        <div className="w-full h-[600px] md:h-[700px] bg-[#05060A] relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
           {/* Subtle Deep Charcoal Radial Center Ambient */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#0F121C_0%,_#05060A_75%)] pointer-events-none" />
 
