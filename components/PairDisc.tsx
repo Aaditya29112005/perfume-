@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 
 export const PairDisc: React.FC = () => {
   return (
     <div className="w-full py-24 bg-[#05060A] text-[var(--blanc-pur)] overflow-hidden border-t border-[rgba(255,255,255,0.1)]">
       <div className="max-w-[1280px] mx-auto px-6 md:px-16">
-        <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="type-eyebrow text-[var(--rouge)] font-bold tracking-widest uppercase block mb-1">
               MOST VALUABLE PERFUME · MODÉLISATION 3D D&apos;EXCEPTION
@@ -29,35 +30,46 @@ export const PairDisc: React.FC = () => {
           {/* Subtle Deep Charcoal Radial Center Ambient */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#0F121C_0%,_#05060A_75%)] pointer-events-none" />
 
-          {/* Left Side Product Showcase Info & Bestseller Badge */}
-          <div className="absolute top-8 left-8 md:top-12 md:left-12 z-10 space-y-3 max-w-[360px] md:max-w-[420px]">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 bg-[var(--rouge)] text-white text-[11px] font-extrabold tracking-widest uppercase font-mono shadow-md">
-                MOST VALUABLE PERFUME
-              </span>
-              <span className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/50 text-[11px] font-extrabold tracking-widest uppercase font-mono backdrop-blur-sm shadow-md">
-                ★ BESTSELLER
+          {/* Left Side Grand Typography Layout Matching Image 2 */}
+          <div className="absolute top-10 left-8 md:top-16 md:left-14 z-10 space-y-4 max-w-[360px] md:max-w-[500px]">
+            {/* Red Eyebrow Line */}
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-[var(--rouge)]" />
+              <span className="type-eyebrow text-[var(--rouge)] font-bold tracking-widest uppercase text-xs">
+                MOST VALUABLE PERFUME · BESTSELLER
               </span>
             </div>
 
+            {/* Giant Product Title */}
             <div>
-              <h3 className="type-product text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-none mb-1">
+              <h3 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tight leading-none">
                 ON A DATE
               </h3>
-              <p className="text-amber-400 font-mono text-sm tracking-widest uppercase font-bold">
-                EAU DE PARFUM · 50ML / 1.7 FL. OZ.
-              </p>
             </div>
 
-            <p className="text-gray-300 text-xs md:text-sm leading-relaxed font-sans line-clamp-3">
-              An intoxicating blend of sparkling bergamot, warm amber, and precious oud wood. Handcrafted in Grasse, France as our #1 iconic fragrance signature.
+            {/* Red Italic Subtitle */}
+            <p className="type-echo text-base md:text-xl text-[var(--rouge)] font-serif italic">
+              *L&apos;étincelle romantique — Most Valuable Perfume.*
             </p>
 
-            <div className="pt-2 flex items-center gap-4">
-              <span className="text-2xl font-black text-white font-mono">€180.00</span>
-              <span className="type-micro px-2.5 py-1 bg-white/10 text-gray-300 rounded text-[10px] font-mono tracking-widest uppercase">
-                IN STOCK · FREE SHIPPING
-              </span>
+            {/* Fragrance Notes Mono Line */}
+            <div className="type-micro text-gray-400 font-mono tracking-widest uppercase text-xs font-semibold">
+              WARM · AMBER · BERGAMOT · OUD
+            </div>
+
+            {/* Paragraph Description */}
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed font-sans">
+              An evocative olfactory journey capturing the electric romance of a Paris evening. Bright Calabrian bergamot yields to an intoxicating heart of golden amber resin, anchored by velvety cashmere musk.
+            </p>
+
+            {/* Outline CTA Button */}
+            <div className="pt-2">
+              <Link
+                href="/products/on-a-date"
+                className="inline-block px-8 py-3.5 border border-white/40 hover:border-white text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 hover:bg-white hover:text-black"
+              >
+                EXPLORE PARFUM
+              </Link>
             </div>
           </div>
 
