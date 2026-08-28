@@ -5,7 +5,7 @@ import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 
 export const PairDisc: React.FC = () => {
   return (
-    <div className="w-full py-24 bg-[var(--noir)] text-[var(--blanc-pur)] overflow-hidden border-t border-[rgba(255,255,255,0.1)]">
+    <div className="w-full py-24 bg-black text-[var(--blanc-pur)] overflow-hidden border-t border-[rgba(255,255,255,0.1)]">
       <div className="max-w-[1280px] mx-auto px-6 md:px-16">
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
@@ -24,11 +24,8 @@ export const PairDisc: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Model Stage Container - Seamlessly Merged with Background & Soft Radial Spotlight */}
-        <div className="w-full h-[540px] md:h-[620px] bg-[var(--noir)] relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
-          {/* Soft Radial Ambient Spotlight Merging Box into Background */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(30,50,90,0.35)_0%,_rgba(7,11,24,1)_70%)] pointer-events-none" />
-
+        {/* 3D Model Stage Container - Pure Jet Black Stage */}
+        <div className="w-full h-[540px] md:h-[620px] bg-black relative overflow-hidden flex items-center justify-center p-6 border-none outline-none">
           {/* Top-Left Header Badge */}
           <div className="absolute top-6 left-6 z-10 pointer-events-none space-y-1">
             <div className="flex items-center gap-2">
