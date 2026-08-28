@@ -106,14 +106,28 @@ export const HeroObserver: React.FC = () => {
           </div>
         </div>
 
-        {/* Center/Right Column: 3D Flacon Hero Interactive Display */}
+        {/* Center/Right Column: 3D model ONLY for On A Date (activeIdx === 0), HD Image for all other products */}
         <div className="relative flex-1 flex justify-center items-center h-[420px] md:h-[540px] w-full">
           <div className="w-full h-full flex items-center justify-center">
-            <FlaconViewer3D
-              key={currentProduct.id}
-              imageSrc={currentProduct.bottleImage50ml}
-              altText={`${currentProduct.name} 3D Flacon Model`}
-            />
+            {activeIdx === 0 ? (
+              <FlaconViewer3D
+                key={currentProduct.id}
+                imageSrc={currentProduct.bottleImage50ml}
+                altText={`${currentProduct.name} 3D Flacon Model`}
+              />
+            ) : (
+              <div className="relative w-64 md:w-80 h-full flex items-center justify-center">
+                <Image
+                  key={currentProduct.id}
+                  src={currentProduct.bottleImage50ml}
+                  alt={currentProduct.name}
+                  width={340}
+                  height={440}
+                  priority
+                  className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)] max-h-full transition-all duration-700 hover:scale-105"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
