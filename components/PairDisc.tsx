@@ -24,8 +24,8 @@ export const PairDisc: React.FC = () => {
           </div>
         </div>
 
-        {/* 3D Model Stage Container */}
-        <div className="w-full h-[540px] md:h-[620px] border border-[rgba(255,255,255,0.15)] bg-black/80 relative overflow-hidden flex items-center justify-center p-6 shadow-2xl">
+        {/* 3D Model Stage Container - Seamless Borderless Dark Stage */}
+        <div className="w-full h-[540px] md:h-[620px] bg-[#030407] relative overflow-hidden flex items-center justify-center p-6 shadow-2xl border-none outline-none">
           {/* Top-Left Header Badge */}
           <div className="absolute top-6 left-6 z-10 pointer-events-none space-y-1">
             <div className="flex items-center gap-2">
@@ -38,17 +38,14 @@ export const PairDisc: React.FC = () => {
               ON A DATE (50ML)
             </h3>
             <p className="type-micro text-gray-400 uppercase tracking-widest font-mono">
-              SCROLL / DRAG FOR CINEMATIC 3D CAMERA ZOOM · WARM AMBER · BERGAMOT
+              360° INTERACTIVE ROTATION · WARM AMBER · BERGAMOT
             </p>
           </div>
 
-          {/* 3D Flacon Viewer with Sphere Cap Model + Floating Embers & Scroll Zoom */}
+          {/* 3D Flacon Viewer */}
           <FlaconViewer3D
             imageSrc="/oad50.png"
             altText="On A Date 3D Flacon Model - Most Valuable Perfume"
-            capStyle="sphere"
-            showParticles={true}
-            enableScrollZoom={true}
           />
         </div>
       </div>

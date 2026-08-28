@@ -8,9 +8,6 @@ interface FlaconViewer3DProps {
   altText?: string;
   liquidColor?: string;
   className?: string;
-  capStyle?: 'sphere' | 'crown';
-  showParticles?: boolean;
-  enableScrollZoom?: boolean;
 }
 
 export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
@@ -18,9 +15,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
   altText = 'On A Date 3D Flacon',
   liquidColor = '#C87D32',
   className = '',
-  capStyle = 'sphere',
-  showParticles = true,
-  enableScrollZoom = true,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
@@ -41,9 +35,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(30, containerWidth / containerHeight, 0.1, 1000);
     camera.position.set(0, 0.1, 8.0);
-
-    let targetCameraY = 0.1;
-    let targetCameraZ = 8.0;
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -165,45 +156,13 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     neckMesh.position.y = bodyMesh.position.y + bodyHeight / 2 + neckHeight / 2 + 0.01;
     bottleGroup.add(neckMesh);
 
-    // C. 3D Cap Assembly (Sphere vs Crown Cap Finial)
-    if (capStyle === 'crown') {
-      const crownCapGroup = new THREE.Group();
-
-      const crownBaseGeo = new THREE.CylinderGeometry(0.35, 0.4, 0.15, 32);
-      const crownBaseMesh = new THREE.Mesh(crownBaseGeo, obsidianGlassMaterial);
-      crownBaseMesh.position.y = 0;
-      crownCapGroup.add(crownBaseMesh);
-
-      const crownWaistGeo = new THREE.CylinderGeometry(0.55, 0.32, 0.45, 32);
-      const crownWaistMesh = new THREE.Mesh(crownWaistGeo, obsidianGlassMaterial);
-      crownWaistMesh.position.y = 0.3;
-      crownCapGroup.add(crownWaistMesh);
-
-      const crownSphereGeo = new THREE.SphereGeometry(0.24, 32, 32);
-      const crownSphereMesh = new THREE.Mesh(crownSphereGeo, obsidianGlassMaterial);
-      crownSphereMesh.position.y = 0.6;
-      crownCapGroup.add(crownSphereMesh);
-
-      const crossVertGeo = new THREE.BoxGeometry(0.12, 0.42, 0.12);
-      const crossHorizGeo = new THREE.BoxGeometry(0.38, 0.12, 0.12);
-      const crossVertMesh = new THREE.Mesh(crossVertGeo, obsidianGlassMaterial);
-      const crossHorizMesh = new THREE.Mesh(crossHorizGeo, obsidianGlassMaterial);
-      crossVertMesh.position.y = 0.88;
-      crossHorizMesh.position.y = 0.92;
-      crownCapGroup.add(crossVertMesh);
-      crownCapGroup.add(crossHorizMesh);
-
-      crownCapGroup.position.y = neckMesh.position.y + neckHeight / 2 + 0.1;
-      crownCapGroup.castShadow = true;
-      bottleGroup.add(crownCapGroup);
-    } else {
-      const capRadius = 0.64;
-      const capSphereGeo = new THREE.SphereGeometry(capRadius, 64, 64);
-      const capMesh = new THREE.Mesh(capSphereGeo, obsidianGlassMaterial);
-      capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius * 0.72;
-      capMesh.castShadow = true;
-      bottleGroup.add(capMesh);
-    }
+    // C. Glossy Sphere Cap
+    const capRadius = 0.64;
+    const capSphereGeo = new THREE.SphereGeometry(capRadius, 64, 64);
+    const capMesh = new THREE.Mesh(capSphereGeo, obsidianGlassMaterial);
+    capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius * 0.72;
+    capMesh.castShadow = true;
+    bottleGroup.add(capMesh);
 
     // D. Front Face Material / Texture (Covers 100% of the front face seamlessly)
     const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.99, bodyHeight * 0.99);
@@ -364,35 +323,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     shadowMesh.position.y = pedestalMesh.position.y + 0.085;
     scene.add(shadowMesh);
 
-    // G. 200 Floating Ember Dust Particles System
-    let particleGeo: THREE.BufferGeometry | null = null;
-    if (showParticles) {
-      const particleCount = 200;
-      particleGeo = new THREE.BufferGeometry();
-      const particlePositions = new Float32Array(particleCount * 3);
-
-      for (let i = 0; i < particleCount; i++) {
-        particlePositions[i * 3 + 0] = (Math.random() - 0.5) * 12;
-        particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 10;
-        particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 12;
-      }
-
-      particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-
-      const particleMat = new THREE.PointsMaterial({
-        color: 0xe6b800,
-        size: 0.05,
-        transparent: true,
-        opacity: 0.65,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-
-      const particles = new THREE.Points(particleGeo, particleMat);
-      scene.add(particles);
-    }
-
-    // 6. Smooth Controls & Rotation
+    // 6. Smooth Mouse/Touch Drag Controls (Zero Wheel Hijacking)
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
@@ -420,16 +351,9 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       isDragging = false;
     };
 
-    const handleWheel = (e: WheelEvent) => {
-      if (!enableScrollZoom) return;
-      targetCameraY = Math.max(-1.4, Math.min(1.6, targetCameraY + e.deltaY * 0.002));
-      targetCameraZ = Math.max(5.5, Math.min(9.5, targetCameraZ + e.deltaY * 0.0025));
-    };
-
     container.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
-    container.addEventListener('wheel', handleWheel, { passive: true });
 
     // Touch Handlers
     const handleTouchStart = (e: TouchEvent) => {
@@ -457,7 +381,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 7. Render Loop
+    // 7. Render Loop (Smooth Auto-Rotation & Hover Damping)
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
@@ -466,27 +390,10 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
         targetRotationX *= 0.95;
       }
 
-      // Smooth Camera Damping
-      camera.position.y += (targetCameraY - camera.position.y) * 0.08;
-      camera.position.z += (targetCameraZ - camera.position.z) * 0.08;
-
       bottleGroup.rotation.y += (targetRotationY - bottleGroup.rotation.y) * 0.08;
       bottleGroup.rotation.x += (targetRotationX - bottleGroup.rotation.x) * 0.08;
 
       bottleGroup.position.y = Math.sin(Date.now() * 0.0018) * 0.035;
-
-      // Particle upward drift
-      if (particleGeo) {
-        const posAttr = particleGeo.attributes.position;
-        const positions = posAttr.array as Float32Array;
-        for (let i = 0; i < positions.length / 3; i++) {
-          positions[i * 3 + 1] += 0.006;
-          if (positions[i * 3 + 1] > 5) {
-            positions[i * 3 + 1] = -5;
-          }
-        }
-        posAttr.needsUpdate = true;
-      }
 
       renderer.render(scene, camera);
     };
@@ -510,7 +417,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       container.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
-      container.removeEventListener('wheel', handleWheel);
       container.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
@@ -520,15 +426,14 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       }
       renderer.dispose();
     };
-  }, [isClient, imageSrc, altText, liquidColor, capStyle, showParticles, enableScrollZoom]);
+  }, [isClient, imageSrc, altText, liquidColor]);
 
   return (
-    <div className={`relative w-full h-full flex flex-col items-center justify-center ${className}`}>
+    <div className={`relative w-full h-full flex flex-col items-center justify-center outline-none border-none select-none ${className}`}>
       <div
         ref={mountRef}
-        className="w-full h-full min-h-[460px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+        className="w-full h-full min-h-[460px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none outline-none border-none"
       />
     </div>
   );
 };
-
