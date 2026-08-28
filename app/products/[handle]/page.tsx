@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 import { NotePyramid } from '@/components/NotePyramid';
-import { PRODUCTS, Product, getProductByHandle } from '@/lib/products';
+import { PRODUCTS, getProductByHandle, Product } from '@/lib/products';
 import { useAppStore } from '@/lib/store';
 import { Check, ShieldCheck, Truck } from 'lucide-react';
 
@@ -39,7 +38,6 @@ export default function ProductDetailPage() {
   };
 
   const currentPrice = selectedSize === '50ml' ? product.price50ml : product.price100ml;
-  const currentBottleImg = selectedSize === '50ml' ? product.bottleImage50ml : product.bgImage;
 
   const otherProducts = PRODUCTS.filter((p) => p.id !== product.id);
 
@@ -63,16 +61,30 @@ export default function ProductDetailPage() {
 
         {/* PDP Main Stage (2 columns) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column: Interactive 3D Flacon Stage */}
-          <div className="lg:col-span-7 h-[540px] md:h-[620px] bg-black/60 border border-[rgba(255,255,255,0.15)] relative overflow-hidden flex items-center justify-center p-6 shadow-2xl">
-            <div
-              className="w-full h-full flex items-center justify-center"
-            >
-              <FlaconViewer3D
-                imageSrc={currentBottleImg}
-                altText={product.name}
-                liquidColor={product.accentColor}
+          {/* Left Column: High-Definition Product Image Showcase Stage */}
+          <div className="lg:col-span-7 h-[540px] md:h-[620px] bg-black/80 border border-[rgba(255,255,255,0.15)] relative overflow-hidden flex items-center justify-center p-8 shadow-2xl group">
+            {/* Ambient Spotlight Glow Background */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none" />
+
+            {/* High-Definition Bottle Image */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <Image
+                src={product.bottleImage50ml}
+                alt={product.name}
+                width={360}
+                height={500}
+                priority
+                className={`object-contain max-h-[85%] w-auto transition-all duration-500 drop-shadow-[0_25px_40px_rgba(0,0,0,0.95)] group-hover:scale-105 ${
+                  isSwitching ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                }`}
               />
+            </div>
+
+            {/* Subtle Bottom Badge Tag */}
+            <div className="absolute bottom-6 left-6 z-10 pointer-events-none">
+              <span className="type-micro text-gray-400 font-mono tracking-widest block text-xs">
+                HAUTE PARFUMERIE DE GRASSE · 50ML / 1.7 FL. OZ.
+              </span>
             </div>
           </div>
 
@@ -114,10 +126,14 @@ export default function ProductDetailPage() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className="w-full h-full flex items-center justify-center"
+                      className={`w-full py-3 border text-xs font-bold tracking-widest uppercase transition-all cursor-pointer flex flex-col items-center justify-center gap-1 ${
+                        selectedSize === size
+                          ? 'border-[var(--rouge)] bg-[var(--rouge)] text-white'
+                          : 'border-[rgba(255,255,255,0.2)] bg-transparent text-gray-300 hover:border-white'
+                      }`}
                     >
                       <span>{size} FLACON</span>
-                      <span>€{size === '50ml' ? product.price50ml : product.price100ml}</span>
+                      <span className="text-[10px] opacity-80">€{size === '50ml' ? product.price50ml : product.price100ml}</span>
                     </button>
                   ))}
                 </div>
