@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRASMETICS — Identity Sheet & Brand Book Specification (Sheet 1 & Sheet 2)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Exact Figma Sheet 1 & Sheet 2 Specifications */
+    .sheet-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #C8102E;
+      margin-bottom: 8px;
+    }
+
+    .content-container-1280 {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 64px);
+    }
+
+    /* SHEET 2: PAIRED HALF-DISC SYSTEM */
+    .paired-disc-unit {
+      position: relative;
+      width: 185px;
+      height: 245px;
+      margin: 0 auto;
+    }
+
+    .disc-half-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 92.5px;
+      height: 185px;
+      border-radius: 185px 0 0 185px !important;
+    }
+
+    .disc-half-right {
+      position: absolute;
+      top: 60px; /* 32% downward offset */
+      right: 0;
+      width: 92.5px;
+      height: 185px;
+      border-radius: 0 185px 185px 0 !important;
+    }
+
+    /* F Monogram Vector Styling */
+    .f-monogram-box {
+      border: 1px solid rgba(7, 11, 24, 0.15);
+      padding: 32px;
+      text-align: center;
+      background: white;
+    }
+
+    .f-monogram-svg {
+      width: 60px;
+      height: 80px;
+    }
+
+    /* Tables */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .spec-table tr {
+      border-bottom: 1px solid rgba(7, 11, 24, 0.15);
+    }
+    .spec-table td {
+      padding: 16px;
+      font-size: 0.85rem;
+      vertical-align: top;
+    }
+  </style>
+</head>
+<body style="background: #F4F1E8; color: #070B18;">
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Le Drapeau Header Strip -->
+  <div class="drapeau-strip">
+    <div class="drapeau-bleu"></div>
+    <div class="drapeau-blanc"></div>
+    <div class="drapeau-rouge"></div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo-clean">
+        <svg class="brand-monogram-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="10" width="35" height="10" fill="#FFFFFF"/>
+          <rect x="15" y="30" width="25" height="10" fill="#FFFFFF"/>
+          <rect x="15" y="0" width="10" height="75" fill="#FFFFFF"/>
+        </svg>
+        <span class="brand-text-logo">FRASMETICS</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="collection.html" class="nav-link">Collection</a></li>
+          <li><a href="five-accords.html" class="nav-link">Five Accords</a></li>
+          <li><a href="custom-studio.html" class="nav-link">Studio</a></li>
+          <li><a href="pyramid.html" class="nav-link">Pyramid</a></li>
+          <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+          <li><a href="charter.html" class="nav-link active">House Charter</a></li>
+          <li><a href="reviews.html" class="nav-link">Reviews</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="openSearchModal()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" onclick="toggleCartDrawer()"><i class="fa-solid fa-bag-shopping"></i><span class="cart-badge" id="cartCountBadge">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MASTHEAD (BAND 1 - FIGMA SHEET 1 & 2 HEADER) -->
+  <section style="background: #070B18; color: white; padding: 60px 32px; text-align: center; border-bottom: var(--hairline);">
+    <div class="content-container-1280">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <div class="drapeau-strip" style="width: 28px; height: 4px;">
+          <div class="drapeau-bleu"></div>
+          <div class="drapeau-blanc"></div>
+          <div class="drapeau-rouge"></div>
+        </div>
+        <span style="font-size: 1.2rem; font-weight: 900; letter-spacing: 0.15em;">FRASMETICS</span>
+      </div>
+      <p style="font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: #C8102E; font-weight: 800; margin-bottom: 8px;">
+        FULL FIGMA DESIGN SPECIFICATION — SHEET 1 & SHEET 2
+      </p>
+      <p style="font-family: var(--font-accent); font-style: italic; color: rgba(255,255,255,0.6); font-size: 1.15rem;">
+        Système de Design · Tricolore Luxe · Brand Book v1.0 (2026)
+      </p>
+    </div>
+  </section>
+
+  <!-- SHEET 2: IDENTITY SYSTEM & LOGO LOCKUPS -->
+  <section style="background: #FFFFFF; padding: 80px 32px; border-bottom: 1px solid rgba(7,11,24,0.15);">
+    <div class="content-container-1280">
+      <div class="sheet-section-title">SHEET 2 — IDENTITY SYSTEM & LOGO LOCKUPS</div>
+      <h2 class="section-title-gate" style="color: #070B18; font-size: 2.6rem; margin-bottom: 40px;">PRIMARY TYPEFACE & MONOGRAM</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 60px;">
+        
+        <!-- 2.1 Primary Mark, Light Ground -->
+        <div class="f-monogram-box">
+          <p style="font-size: 9px; letter-spacing: 0.25em; color: #C8102E; font-weight: 800; margin-bottom: 16px;">2.1 MONOGRAM F (LIGHT GROUND)</p>
+          <svg class="f-monogram-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="10" width="35" height="10" fill="#070B18"/>
+            <rect x="15" y="30" width="25" height="10" fill="#070B18"/>
+            <rect x="15" y="0" width="10" height="75" fill="#070B18"/>
+          </svg>
+          <p style="font-size: 8px; letter-spacing: 0.35em; font-weight: 800; color: #070B18; margin-top: 12px;">FRANCE</p>
+        </div>
+
+        <!-- 2.2 Inverted Mark, Dark Ground -->
+        <div class="f-monogram-box" style="background: #070B18; color: white;">
+          <p style="font-size: 9px; letter-spacing: 0.25em; color: #C8102E; font-weight: 800; margin-bottom: 16px;">2.2 INVERTED MARK (PACKAGING)</p>
+          <svg class="f-monogram-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="15" y="10" width="35" height="10" fill="#FFFFFF"/>
+            <rect x="15" y="30" width="25" height="10" fill="#FFFFFF"/>
+            <rect x="15" y="0" width="10" height="75" fill="#FFFFFF"/>
+          </svg>
+          <p style="font-size: 8px; letter-spacing: 0.35em; font-weight: 800; color: #FFFFFF; margin-top: 12px;">FRANCE</p>
+        </div>
+
+        <!-- 2.3 Typeface Declaration -->
+        <div class="f-monogram-box" style="text-align: left;">
+          <p style="font-size: 9px; letter-spacing: 0.25em; color: #C8102E; font-weight: 800; margin-bottom: 12px;">2.3 TYPEFACE DECLARATION</p>
+          <h3 style="font-size: 1.8rem; font-weight: 900; color: #070B18; margin-bottom: 8px;">GATE BOLD</h3>
+          <p style="font-size: 0.8rem; font-family: var(--font-ui); color: rgba(7,11,24,0.76); line-height: 1.6;">
+            Used for headlines, ghost wordmark, section titles, and micro-labels. Paired with <strong>Cormorant Garamond</strong> for French echoes.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 4. PAIRED HALF-DISC COLOUR PALETTE SYSTEM (SHEET 2 FIGMA SPEC) -->
+      <div style="border-top: 1px solid rgba(7,11,24,0.15); padding-top: 60px;">
+        <div class="sheet-section-title">4. COLOUR PALETTE — PAIRED HALF-DISC SYSTEM</div>
+        <h3 style="font-size: 1.8rem; margin-bottom: 40px;">3 PAIR UNITS (LEFT UPPER / RIGHT LOWER 32% OFFSET)</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center;">
+          
+          <!-- Pair 1: Bleu Midnight + Rouge Marianne -->
+          <div>
+            <div class="paired-disc-unit">
+              <div class="disc-half-left" style="background: #0F1B3D;"></div>
+              <div class="disc-half-right" style="background: #C8102E;"></div>
+            </div>
+            <h4 style="font-size: 0.9rem; margin-top: 24px; color: #070B18;">PAIR 1: SIGNATURE TENSION</h4>
+            <p style="font-size: 8px; letter-spacing: 0.2em; color: #C8102E; font-weight: 800;">#0F1B3D + #C8102E</p>
+            <p style="font-size: 0.78rem; color: rgba(7,11,24,0.6); margin-top: 4px;">Bleu Midnight against Rouge Marianne</p>
+          </div>
+
+          <!-- Pair 2: Bleu Royal + Noir -->
+          <div>
+            <div class="paired-disc-unit">
+              <div class="disc-half-left" style="background: #1A3AA8;"></div>
+              <div class="disc-half-right" style="background: #070B18;"></div>
+            </div>
+            <h4 style="font-size: 0.9rem; margin-top: 24px; color: #070B18;">PAIR 2: FLAG BLUE & INK</h4>
+            <p style="font-size: 8px; letter-spacing: 0.2em; color: #C8102E; font-weight: 800;">#1A3AA8 + #070B18</p>
+            <p style="font-size: 0.78rem; color: rgba(7,11,24,0.6); margin-top: 4px;">Bleu Royal against Noir</p>
+          </div>
+
+          <!-- Pair 3: Blanc Ivory + Blanc Pur (Outline) -->
+          <div>
+            <div class="paired-disc-unit">
+              <div class="disc-half-left" style="background: #F4F1E8; border: 1px solid rgba(0,0,0,0.15);"></div>
+              <div class="disc-half-right" style="background: transparent; border: 1px solid #070B18;"></div>
+            </div>
+            <h4 style="font-size: 0.9rem; margin-top: 24px; color: #070B18;">PAIR 3: PAPER & HAIRLINE</h4>
+            <p style="font-size: 8px; letter-spacing: 0.2em; color: #C8102E; font-weight: 800;">#F4F1E8 + #FFFFFF (1px HAIRLINE)</p>
+            <p style="font-size: 0.78rem; color: rgba(7,11,24,0.6); margin-top: 4px;">Blanc Ivory against Blanc Pur</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SHEET 1: BRAND BOOK 5 STACKED BANDS -->
+  <section style="background: #F4F1E8; padding: 80px 32px;">
+    <div class="content-container-1280">
+      
+      <!-- 01 PALETTE -->
+      <div style="margin-bottom: 80px;">
+        <span class="eyebrow-ruled" style="color: #C8102E;">01 — COULEURS</span>
+        <h2 class="section-title-gate" style="color: #070B18; font-size: 2.8rem;">THE PALETTE SWATCHES</h2>
+        <p class="french-flourish" style="margin-bottom: 32px;">Bleu, blanc, rouge — rien de plus.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: 1px solid rgba(7,11,24,0.15); margin-bottom: 24px;">
+          <div>
+            <div style="height: 100px; background: #0F1B3D;"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">BLEU MIDNIGHT</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#0F1B3D</div>
+            </div>
+          </div>
+          <div>
+            <div style="height: 100px; background: #1A3AA8;"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">BLEU ROYAL</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#1A3AA8</div>
+            </div>
+          </div>
+          <div>
+            <div style="height: 100px; background: #F4F1E8; border: 1px solid rgba(0,0,0,0.1);"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">BLANC IVORY</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#F4F1E8</div>
+            </div>
+          </div>
+          <div>
+            <div style="height: 100px; background: #FFFFFF; border: 1px solid rgba(0,0,0,0.1);"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">BLANC PUR</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#FFFFFF</div>
+            </div>
+          </div>
+          <div>
+            <div style="height: 100px; background: #C8102E;"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">ROUGE MARIANNE</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#C8102E</div>
+            </div>
+          </div>
+          <div>
+            <div style="height: 100px; background: #070B18;"></div>
+            <div style="padding: 12px; background: #F4F1E8; border-top: 1px solid rgba(7,11,24,0.15);">
+              <div style="font-size: 8px; font-weight: 800;">NOIR</div>
+              <div style="font-size: 8px; color: #C8102E; font-weight: 800;">#070B18</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 RULES OF THE HOUSE TABLE -->
+      <div>
+        <span class="eyebrow-ruled" style="color: #C8102E;">05 — ESPACEMENT & MOUVEMENT</span>
+        <h2 class="section-title-gate" style="color: #070B18; font-size: 2.8rem;">RULES OF THE HOUSE</h2>
+        <p class="french-flourish" style="margin-bottom: 36px;">Une seule courbe. Un seul geste par section.</p>
+
+        <table class="spec-table">
+          <tbody>
+            <tr>
+              <td style="font-weight: 800;">CONTAINER / GUTTER</td>
+              <td style="color: #C8102E; font-family: monospace;">1280px, clamp(20px – 64px)</td>
+              <td>Asymmetric editorial grid, hairlines act as the structure</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">SECTION RHYTHM</td>
+              <td style="color: #C8102E; font-family: monospace;">clamp(90px – 170px)</td>
+              <td>Vertical padding, breathes with viewport height</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">RADIUS</td>
+              <td style="color: #C8102E; font-family: monospace;">0</td>
+              <td>No rounded corners anywhere, circles only for accent dots</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">HAIRLINES</td>
+              <td style="color: #C8102E; font-family: monospace;">1px</td>
+              <td>Borders are the grid, not decoration</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">SIGNATURE EASING</td>
+              <td style="color: #C8102E; font-family: monospace;">cubic-bezier(.22, 1, .36, 1)</td>
+              <td>Fast cut, long settle, one curve across the whole site</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">PRODUCT SWITCH</td>
+              <td style="color: #C8102E; font-family: monospace;">380ms out, 460ms in</td>
+              <td>Full sheen shift, flacon drops in from above</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 800;">LE DRAPEAU</td>
+              <td style="color: #C8102E; font-family: monospace;">Bleu · Blanc · Rouge</td>
+              <td>Always in that order: progress bar, logo, hairlines, footer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #0F1B3D; color: white; padding: 60px 32px 0; text-align: center;">
+    <div class="content-container-1280" style="padding-bottom: 36px;">
+      <h1 style="font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 900; letter-spacing: 0.04em; -webkit-text-stroke: 1px rgba(255,255,255,0.1); color: transparent; margin-bottom: 24px;">
+        FRASMETICS
+      </h1>
+      <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); letter-spacing: 0.15em;">
+        © 2026 FRASMETICS · EAU DE PARFUM / ALL RIGHTS RESERVED / MODERN ARTISTRY · TIMELESS LUXURY
+      </p>
+    </div>
+    <div class="drapeau-strip" style="height: 6px;">
+      <div class="drapeau-bleu"></div>
+      <div class="drapeau-blanc"></div>
+      <div class="drapeau-rouge"></div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRASMETICS PARIS — Haute Parfumerie & Five Accords</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Le Drapeau Progress Strip (Bleu -> Blanc -> Rouge) -->
+  <div class="drapeau-strip">
+    <div class="drapeau-bleu"></div>
+    <div class="drapeau-blanc"></div>
+    <div class="drapeau-rouge"></div>
+  </div>
+
+  <!-- Endless Marquee Ticker -->
+  <div class="marquee-wrapper">
+    <div class="marquee-content">
+      <span class="marquee-item"><i class="fa-solid fa-crown"></i> 25% EXTRAIT DE PARFUM CONCENTRATION</span>
+      <span class="marquee-item"><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY INSURED EXPRESS SHIPPING OVER 100 €</span>
+      <span class="marquee-item"><i class="fa-solid fa-gift"></i> 2 COMPLIMENTARY 2ML SAMPLES INCLUDED WITH EVERY ORDER</span>
+      <span class="marquee-item"><i class="fa-solid fa-certificate"></i> 100% AUTHENTIC HAUTE PARFUMERIE DE FRANCE</span>
+      <span class="marquee-item"><i class="fa-solid fa-crown"></i> 25% EXTRAIT DE PARFUM CONCENTRATION</span>
+      <span class="marquee-item"><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY INSURED EXPRESS SHIPPING OVER 100 €</span>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo-clean">
+        <svg class="brand-monogram-svg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="10" width="35" height="10" fill="#FFFFFF"/>
+          <rect x="15" y="30" width="25" height="10" fill="#FFFFFF"/>
+          <rect x="15" y="0" width="10" height="75" fill="#FFFFFF"/>
+        </svg>
+        <span class="brand-text-logo">FRASMETICS</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="collection.html" class="nav-link">Collection</a></li>
+          <li><a href="five-accords.html" class="nav-link">Five Accords</a></li>
+          <li><a href="custom-studio.html" class="nav-link">Studio</a></li>
+          <li><a href="pyramid.html" class="nav-link">Pyramid</a></li>
+          <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+          <li><a href="charter.html" class="nav-link">Charter</a></li>
+          <li><a href="reviews.html" class="nav-link">Reviews</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button id="soundToggleBtn" onclick="toggleAudioFx()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 12px; font-family: var(--font-unbounded); font-size: 0.7rem; cursor: pointer;">
+          <i class="fa-solid fa-volume-high"></i> SOUND: ON
+        </button>
+
+        <div class="currency-selector">
+          <select id="currencySelect" onchange="changeCurrency(this.value)" style="background: transparent; color: white; border: 1px solid rgba(255,255,255,0.2); padding: 4px 8px; font-family: var(--font-unbounded); font-size: 0.7rem; cursor: pointer;">
+            <option value="EUR">EUR (€)</option>
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="INR">INR (₹)</option>
+          </select>
+        </div>
+
+        <button class="icon-btn" onclick="openSearchModal()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" onclick="toggleCartDrawer()"><i class="fa-solid fa-bag-shopping"></i><span class="cart-badge" id="cartCountBadge">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="hero-backdrop">
+      <img src="hero_banner.jpg" onerror="this.onerror=null; this.src='assets/hero_banner.jpg';" alt="Haute Parfumerie Atelier">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-container">
+      <div>
+        <span class="eyebrow-ruled">SYSTÈME DE DESIGN — TRICOLORE LUXE</span>
+        <h1 class="ghost-wordmark">FRASMETICS</h1>
+        <h2 class="section-title-gate" style="color: white;">L'ART DU PARFUM, RÉINVENTÉ.</h2>
+        <p class="french-echo" style="margin-bottom: 24px;">Une signature olfactive d'exception.</p>
+
+        <p style="font-family: var(--font-unbounded); font-size: 0.95rem; color: rgba(255,255,255,0.76); line-height: 1.8; margin-bottom: 36px; max-width: 580px;">
+          Frasmetics crafts niche fragrances at the meeting point of French perfumery tradition and contemporary design. Every composition is distilled into an accord that wears like a signature.
+        </p>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+          <a href="collection.html" class="btn-sarkar-primary">ACQUIRE — LA COLLECTION</a>
+          <a href="five-accords.html" class="btn-sarkar-secondary">FIVE ACCORDS STUDIO</a>
+        </div>
+      </div>
+
+      <!-- Spotlight Product Card -->
+      <div class="hero-spotlight-card">
+        <span class="spotlight-badge">FLAGSHIP ACCORD</span>
+        <img src="hdo50.png" onerror="this.onerror=null; this.src='assets/hdo50.png';" alt="Héritage d'Oud" class="spotlight-img">
+        <h3 class="spotlight-title">HÉRITAGE D'OUD</h3>
+        <p class="spotlight-accords">Cambodian Oud · Russian Leather · Patchouli</p>
+
+        <div class="price-strike-row">
+          <span class="price-original">220 €</span>
+          <span class="price-current" id="heroSpotlightPrice">160 €</span>
+          <span class="discount-badge">-27% OFF</span>
+        </div>
+
+        <button class="btn-sarkar-primary" style="width: 100%; justify-content: center;" onclick="buyNowDirect('hdo50')">
+          ACQUIRE — HÉRITAGE D'OUD
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Column Trust Bar -->
+  <section class="trust-bar">
+    <div class="trust-container">
+      <div class="trust-item">
+        <i class="fa-solid fa-shield-halved trust-icon"></i>
+        <div class="trust-text">
+          <h4>100% ORIGINAL</h4>
+          <p>Direct from Paris Atelier</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-clock trust-icon"></i>
+        <div class="trust-text">
+          <h4>18+ HOURS SILLAGE</h4>
+          <p>High Extrait Concentration</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-truck-ramp-box trust-icon"></i>
+        <div class="trust-text">
+          <h4>FREE EXPRESS SHIPPING</h4>
+          <p>Insured global delivery</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-box-open trust-icon"></i>
+        <div class="trust-text">
+          <h4>2 FREE SAMPLES</h4>
+          <p>Included with every bottle</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Collection Section -->
+  <section class="collection-section">
+    <div class="collection-container">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span class="eyebrow-ruled" style="justify-content: center;">LA COLLECTION HAUTE PARFUMERIE</span>
+        <h2 class="section-title-gate">THE 12 SIGNATURE ACCORDS</h2>
+        <p class="french-echo">Chaque parfum teinte sa propre scène.</p>
+      </div>
+
+      <div class="product-grid" id="homeProductGrid">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+
+      <div style="text-align: center; margin-top: 60px;">
+        <a href="collection.html" class="btn-sarkar-primary">EXPLORE ALL 12 ACCORDS</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div>
+        <img src="logo_white.png" onerror="this.onerror=null; this.src='assets/logo_white.png';" alt="FRASMETICS" style="height: 32px; margin-bottom: 20px;">
+        <p style="font-family: var(--font-ui); font-size: 0.88rem; color: rgba(255,255,255,0.76); line-height: 1.7; max-width: 360px;">
+          Frasmetics crafts niche fragrances at the meeting point of French perfumery tradition and contemporary design.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 0.85rem; color: var(--color-gold-light); margin-bottom: 16px;">NAVIGATION</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem;">
+          <li><a href="collection.html" style="color: #CBD5E0; text-decoration: none;">Collection</a></li>
+          <li><a href="five-accords.html" style="color: #CBD5E0; text-decoration: none;">Five Accords</a></li>
+          <li><a href="custom-studio.html" style="color: #CBD5E0; text-decoration: none;">Custom Studio</a></li>
+          <li><a href="pyramid.html" style="color: #CBD5E0; text-decoration: none;">Pyramid Inspector</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="font-size: 0.85rem; color: var(--color-gold-light); margin-bottom: 16px;">HOUSE CHARTER</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem;">
+          <li><a href="charter.html" style="color: #CBD5E0; text-decoration: none;">Brand Book v1.0</a></li>
+          <li><a href="quiz.html" style="color: #CBD5E0; text-decoration: none;">Scent Diagnostic Quiz</a></li>
+          <li><a href="reviews.html" style="color: #CBD5E0; text-decoration: none;">Customer Reviews</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="font-size: 0.85rem; color: var(--color-rouge-marianne); margin-bottom: 16px;">ATELIER PARIS</h4>
+        <p style="font-family: var(--font-ui); font-size: 0.82rem; color: #A0AEC0; margin-bottom: 12px;">75001 Place Vendôme, Paris, France</p>
+        <p style="font-family: var(--font-ui); font-size: 0.82rem; color: #A0AEC0;">support@frasmetics.com</p>
+      </div>
+    </div>
+
+    <!-- Ghost Wordmark Watermark -->
+    <h1 style="font-size: clamp(3.5rem, 9vw, 8.5rem); font-weight: 900; letter-spacing: 0.04em; -webkit-text-stroke: 1px rgba(255,255,255,0.08); color: transparent; text-align: center; margin-bottom: 24px;">
+      FRASMETICS
+    </h1>
+
+    <div style="text-align: center; padding-bottom: 24px; font-size: 0.72rem; color: rgba(255,255,255,0.6);">
+      © 2026 FRASMETICS · EAU DE PARFUM / ALL RIGHTS RESERVED / MODERN ARTISTRY · TIMELESS LUXURY
+    </div>
+
+    <div class="drapeau-strip" style="height: 6px;">
+      <div class="drapeau-bleu"></div>
+      <div class="drapeau-blanc"></div>
+      <div class="drapeau-rouge"></div>
+    </div>
+  </footer>
+
+  <!-- Drawer Cart -->
+  <div class="cart-drawer-overlay" id="cartOverlay" onclick="toggleCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-bag-shopping"></i> YOUR CART (<span id="drawerCartCount">0</span>)</h3>
+      <button class="icon-btn" onclick="toggleCartDrawer()">&times;</button>
+    </div>
+    <div id="cartItemsBody" style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px;"></div>
+    <div style="padding: 24px; border-top: var(--hairline); background: #04060E;">
+      <a href="cart.html" class="gokwik-fast-btn" style="text-decoration: none;">
+        <span>⚡ PROCEED TO CHECKOUT</span>
+      </a>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

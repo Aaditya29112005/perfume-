@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bleu-midnight: #0F1B3D;
+  --bleu-royal:    #1A3AA8;
+  --blanc-ivory:   #F4F1E8;
+  --blanc-pur:     #FFFFFF;
+  --rouge:         #C8102E;
+  --noir:          #070B18;
+
+  /* Font Families */
+  --font-gate: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-echo: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Strict Zero Radius Rule everywhere except palette half-discs & dots */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+/* Exemption for the Palette Device Half-Discs & Dots */
+.half-disc-left {
+  border-radius: 96px 0 0 96px !important;
+}
+.half-disc-right {
+  border-radius: 0 96px 96px 0 !important;
+}
+.palette-dot {
+  border-radius: 9999px !important;
+}
+
+/* Base resets & typography */
+html, body {
+  background-color: var(--blanc-ivory);
+  color: var(--noir);
+  font-family: var(--font-gate);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ink ladder opacities */
+.ink-100 { opacity: 1; }
+.ink-76  { opacity: 0.76; }
+.ink-60  { opacity: 0.60; }
+.ink-40  { opacity: 0.40; }
+.ink-10  { opacity: 0.10; }
+
+/* Type scale custom tokens */
+.type-ghost {
+  font-family: var(--font-gate);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 12vw, 16rem);
+  line-height: 0.85;
+  letter-spacing: 0.05em;
+  -webkit-text-stroke: 1px currentColor;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+
+.type-display {
+  font-family: var(--font-gate);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(36px, 6vw, 100px);
+  letter-spacing: 0.04em;
+  line-height: 0.94;
+}
+
+.type-section {
+  font-family: var(--font-gate);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(28px, 3.5vw, 56px);
+  letter-spacing: 0.04em;
+  line-height: 1.04;
+}
+
+.type-product {
+  font-family: var(--font-gate);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(16px, 1.6vw, 24px);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+}
+
+.type-body {
+  font-family: var(--font-gate);
+  font-size: clamp(14px, 1vw, 16px);
+  letter-spacing: 0.015em;
+  line-height: 1.65;
+  max-width: 62ch;
+  opacity: 0.76;
+}
+
+.type-eyebrow {
+  font-family: var(--font-gate);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.30em;
+  color: var(--rouge);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.type-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background-color: var(--rouge);
+}
+
+.type-micro {
+  font-family: var(--font-gate);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  opacity: 0.60;
+}
+
+.type-echo {
+  font-family: var(--font-echo);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--rouge);
+  text-transform: none;
+}
+
+/* Tricolore gradient bar utility */
+.tricolore-bar {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--bleu-midnight) 0%,
+    var(--bleu-midnight) 33.33%,
+    var(--blanc-pur) 33.33%,
+    var(--blanc-pur) 66.66%,
+    var(--rouge) 66.66%,
+    var(--rouge) 100%
+  );
+}
+
+/* Hairline utility */
+.hairline-b {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hairline-b-dark {
+  border-bottom: 1px solid rgba(7, 11, 24, 0.15);
+}
+.hairline-t {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hairline-t-dark {
+  border-top: 1px solid rgba(7, 11, 24, 0.15);
+}
+.hairline-l {
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hairline-r {
+  border-right: 1px solid rgba(7, 11, 24, 0.15);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--noir);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rouge);
+}
