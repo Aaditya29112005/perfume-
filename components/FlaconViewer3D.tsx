@@ -31,10 +31,10 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const containerWidth = container.clientWidth || 500;
     const containerHeight = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup (Closer Z Camera Position for Larger Prominent Fit)
+    // 1. Scene & Camera Setup (Refined Framing so top cap & bottom base fit 100% comfortably)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, 0.05, 6.2);
+    const camera = new THREE.PerspectiveCamera(28, containerWidth / containerHeight, 0.1, 1000);
+    camera.position.set(0, -0.15, 7.4);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -95,11 +95,11 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     // 5. Build 3D Flacon Master Group
     const bottleGroup = new THREE.Group();
 
-    // Increased 3D Flacon Proportions for Bold Perfect Fit
-    const bodyWidth = 2.25;
-    const bodyHeight = 3.05;
-    const bodyDepth = 0.92;
-    const cornerRadius = 0.09;
+    // Dimensions matching oad50.png flacon proportions perfectly
+    const bodyWidth = 2.15;
+    const bodyHeight = 2.90;
+    const bodyDepth = 0.88;
+    const cornerRadius = 0.08;
 
     // A. Extruded Rounded Rectangular Glass Body
     const createRoundedRectShape = (w: number, h: number, r: number) => {
@@ -148,16 +148,16 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     bottleGroup.add(bodyMesh);
 
     // B. Sleek Short Atomizer Neck Collar (Black Obsidian Cylinder)
-    const neckRadiusTop = 0.24;
-    const neckRadiusBottom = 0.26;
-    const neckHeight = 0.24;
+    const neckRadiusTop = 0.23;
+    const neckRadiusBottom = 0.25;
+    const neckHeight = 0.23;
     const neckGeo = new THREE.CylinderGeometry(neckRadiusTop, neckRadiusBottom, neckHeight, 32);
     const neckMesh = new THREE.Mesh(neckGeo, obsidianGlassMaterial);
     neckMesh.position.y = bodyMesh.position.y + bodyHeight / 2 + neckHeight / 2 + 0.01;
     bottleGroup.add(neckMesh);
 
     // C. Glossy Sphere Cap
-    const capRadius = 0.72;
+    const capRadius = 0.68;
     const capSphereGeo = new THREE.SphereGeometry(capRadius, 64, 64);
     const capMesh = new THREE.Mesh(capSphereGeo, obsidianGlassMaterial);
     capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius * 0.72;
@@ -425,7 +425,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     <div className={`relative w-full h-full flex flex-col items-center justify-center outline-none border-none select-none ${className}`}>
       <div
         ref={mountRef}
-        className="w-full h-full min-h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none outline-none border-none"
+        className="w-full h-full min-h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none outline-none border-none"
       />
     </div>
   );
