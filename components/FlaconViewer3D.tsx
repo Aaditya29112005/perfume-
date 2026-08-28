@@ -33,60 +33,81 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(35, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, 0.1, 8.2);
+    const camera = new THREE.PerspectiveCamera(32, containerWidth / containerHeight, 0.1, 1000);
+    camera.position.set(0, 0.2, 8.5);
 
-    // 2. WebGL Renderer Setup
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    // 2. WebGL Renderer Setup with High Fidelity Tone Mapping
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(containerWidth, containerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.25;
 
     container.appendChild(renderer.domElement);
 
-    // 3. Studio Multi-directional Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+    // 3. Studio Environment Setup for Photorealistic Glass Reflections
+    const envCanvas = document.createElement('canvas');
+    envCanvas.width = 512;
+    envCanvas.height = 256;
+    const envCtx = envCanvas.getContext('2d');
+    if (envCtx) {
+      const grad = envCtx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(0.3, '#888899');
+      grad.addColorStop(0.7, '#111118');
+      grad.addColorStop(1, '#050508');
+      envCtx.fillStyle = grad;
+      envCtx.fillRect(0, 0, 512, 256);
+
+      // Studio softbox highlights for sphere cap reflection
+      envCtx.fillStyle = '#ffffff';
+      envCtx.beginPath();
+      envCtx.ellipse(380, 70, 70, 35, -Math.PI / 6, 0, Math.PI * 2);
+      envCtx.fill();
+
+      envCtx.beginPath();
+      envCtx.ellipse(120, 90, 50, 25, Math.PI / 6, 0, Math.PI * 2);
+      envCtx.fill();
+    }
+    const envTexture = new THREE.CanvasTexture(envCanvas);
+    envTexture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = envTexture;
+
+    // 4. Studio Multi-directional Lighting Setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
-    // Key Light (Top Right)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 3.6);
-    keyLight.position.set(5, 8, 6);
+    // Primary Softbox Key Light (Top Right)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
+    keyLight.position.set(4, 7, 5);
     keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
-    // Gold Rim Light (Back Left)
-    const rimLight = new THREE.SpotLight(0xd4af37, 5.5, 25, Math.PI / 4, 0.4);
-    rimLight.position.set(-6, 6, -5);
+    // Silver Specular Rim Light (Back Left)
+    const rimLight = new THREE.DirectionalLight(0xe0e8ff, 2.5);
+    rimLight.position.set(-5, 5, -4);
     scene.add(rimLight);
 
-    // Warm Accent Fill Light (Bottom)
-    const fillLight = new THREE.PointLight(0xe88a25, 2.2, 10);
-    fillLight.position.set(0, -2.5, 3.5);
+    // Warm Ambient Fill (Bottom)
+    const fillLight = new THREE.PointLight(0xffeedd, 1.8, 12);
+    fillLight.position.set(0, -3, 4);
     scene.add(fillLight);
 
-    // 4. Create 3D Flacon Master Group
+    // 5. Build 3D Flacon Master Group
     const bottleGroup = new THREE.Group();
 
-    // Aspect Ratio & Dimensions based on oad50.png (2044 x 4220 -> aspect = 0.48436)
-    const totalHeight = 3.8;
-    const totalWidth = totalHeight * 0.48436; // ~1.84
-    const bottleDepth = 0.72; // Volumetric 3D depth
+    // Dimensional proportions based on oad50.png flacon spec
+    const bodyWidth = 1.95;
+    const bodyHeight = 2.45;
+    const bodyDepth = 0.82;
+    const cornerRadius = 0.08;
 
-    // A. Load Full High-Resolution Bottle Image for Front Face
-    const textureLoader = new THREE.TextureLoader();
-    const frontTexture = textureLoader.load(imageSrc, (texture) => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.needsUpdate = true;
-    });
-
-    // B. Rounded 3D Obsidian Glass Body Geometry
-    const rWidth = totalWidth * 0.94;
-    const rHeight = totalHeight * 0.58; // Rectangular bottle body height
-    const cornerRadius = 0.12;
-
+    // A. Extruded Rounded Rectangular Glass Body
     const createRoundedRectShape = (w: number, h: number, r: number) => {
       const shape = new THREE.Shape();
       const x = -w / 2;
@@ -103,222 +124,269 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       return shape;
     };
 
-    const bodyShape = createRoundedRectShape(rWidth, rHeight, cornerRadius);
+    const bodyShape = createRoundedRectShape(bodyWidth, bodyHeight, cornerRadius);
     const extrudeSettings = {
-      depth: bottleDepth,
+      depth: bodyDepth,
       bevelEnabled: true,
-      bevelSegments: 5,
+      bevelSegments: 4,
       steps: 1,
-      bevelSize: 0.04,
-      bevelThickness: 0.04,
+      bevelSize: 0.03,
+      bevelThickness: 0.03,
     };
     const bodyGeo = new THREE.ExtrudeGeometry(bodyShape, extrudeSettings);
     bodyGeo.center();
 
-    // High-Gloss Dark Obsidian Glass Material for 3D body
-    const bodyMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x08090e,
-      roughness: 0.08,
-      metalness: 0.25,
+    // Jet Black Obsidian Glass Material
+    const obsidianGlassMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x070709,
+      roughness: 0.03,
+      metalness: 0.15,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.03,
-      reflectivity: 0.9,
+      clearcoatRoughness: 0.015,
+      reflectivity: 0.95,
+      envMapIntensity: 1.4,
     });
 
-    const bodyMesh = new THREE.Mesh(bodyGeo, bodyMaterial);
-    bodyMesh.position.y = -totalHeight * 0.16; // Align body below neck/cap
+    const bodyMesh = new THREE.Mesh(bodyGeo, obsidianGlassMaterial);
+    bodyMesh.position.y = -0.45;
     bodyMesh.castShadow = true;
     bodyMesh.receiveShadow = true;
     bottleGroup.add(bodyMesh);
 
-    // C. Gold Metallic Accent Trim along top shoulder bevels
-    const goldMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd4af37,
-      metalness: 0.98,
-      roughness: 0.12,
-    });
-
-    const shoulderBarGeo = new THREE.BoxGeometry(rWidth * 0.92, 0.04, bottleDepth * 0.9);
-    const shoulderBarMesh = new THREE.Mesh(shoulderBarGeo, goldMaterial);
-    shoulderBarMesh.position.y = bodyMesh.position.y + rHeight / 2 + 0.02;
-    bottleGroup.add(shoulderBarMesh);
-
-    // D. Gold Atomizer Neck Collar
-    const neckGeo = new THREE.CylinderGeometry(0.34, 0.36, 0.42, 32);
-    const neckMesh = new THREE.Mesh(neckGeo, goldMaterial);
-    neckMesh.position.y = bodyMesh.position.y + rHeight / 2 + 0.24;
+    // B. Atomizer Neck Collar (Black Obsidian Cylinder)
+    const neckRadiusTop = 0.22;
+    const neckRadiusBottom = 0.24;
+    const neckHeight = 0.28;
+    const neckGeo = new THREE.CylinderGeometry(neckRadiusTop, neckRadiusBottom, neckHeight, 32);
+    const neckMesh = new THREE.Mesh(neckGeo, obsidianGlassMaterial);
+    neckMesh.position.y = bodyMesh.position.y + bodyHeight / 2 + neckHeight / 2 + 0.02;
     bottleGroup.add(neckMesh);
 
-    // E. 3D Volumetric Spherical Cap (Obsidian / Black Onyx)
-    const capRadius = totalWidth * 0.38;
+    // C. 3D Spherical Cap (Polished Black Onyx / Glossy Glass Sphere)
+    const capRadius = 0.65;
     const capSphereGeo = new THREE.SphereGeometry(capRadius, 64, 64);
-    const capMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x07070a,
-      roughness: 0.04,
-      metalness: 0.3,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.02,
-      reflectivity: 0.95,
-    });
-
-    const capMesh = new THREE.Mesh(capSphereGeo, capMaterial);
-    capMesh.position.y = bodyMesh.position.y + rHeight / 2 + 0.42 + capRadius;
+    const capMesh = new THREE.Mesh(capSphereGeo, obsidianGlassMaterial);
+    capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius - 0.04;
     capMesh.castShadow = true;
     bottleGroup.add(capMesh);
 
-    // Gold Accent Ring at base of 3D sphere cap
-    const capRingGeo = new THREE.TorusGeometry(capRadius * 0.65, 0.03, 16, 64);
-    const capRingMesh = new THREE.Mesh(capRingGeo, goldMaterial);
-    capRingMesh.rotation.x = Math.PI / 2;
-    capRingMesh.position.y = capMesh.position.y - capRadius + 0.02;
-    bottleGroup.add(capRingMesh);
-
-    // F. FRONT FACE: Full High-Resolution Image Mesh (Fitted Perfectly)
-    const frontPlaneGeo = new THREE.PlaneGeometry(totalWidth, totalHeight);
-    const frontPlaneMat = new THREE.MeshBasicMaterial({
-      map: frontTexture,
-      transparent: true,
-      alphaTest: 0.02,
-      side: THREE.FrontSide,
-    });
-    const frontPlaneMesh = new THREE.Mesh(frontPlaneGeo, frontPlaneMat);
-    frontPlaneMesh.position.set(0, 0, bottleDepth / 2 + 0.025);
-    bottleGroup.add(frontPlaneMesh);
-
-    // G. BACK FACE: Luxury Engraved Plaque for 180° Back View
+    // D. Extract Clean Title for Front & Back Labels
     const extractNameFromAlt = (alt: string) => {
-      if (alt.includes('On A Date')) return 'ON A DATE';
-      if (alt.includes('Heritage Oud')) return 'HERITAGE OUD';
-      if (alt.includes('Tobacco & Whiskey')) return 'TOBACCO & WHISKEY';
-      if (alt.includes('Pure Nuit')) return 'PURE NUIT';
-      if (alt.includes('Oud Rouge')) return 'OUD ROUGE';
-      return alt.toUpperCase().replace('3D FLACON', '').trim() || 'FRASMETICS';
+      if (alt.includes('On A Date') || alt.includes('ON A DATE')) return 'ON A DATE';
+      if (alt.includes('Heritage Oud') || alt.includes('HERITAGE OUD')) return 'HERITAGE OUD';
+      if (alt.includes('Tobacco') || alt.includes('TOBACCO')) return 'TOBACCO & WHISKEY';
+      if (alt.includes('Pure Nuit') || alt.includes('PURE NUIT')) return 'PURE NUIT';
+      if (alt.includes('Oud Rouge') || alt.includes('OUD ROUGE')) return 'OUD ROUGE';
+      return alt.toUpperCase().replace('3D FLACON', '').trim() || 'ON A DATE';
     };
     const titleText = extractNameFromAlt(altText);
 
-    const createBackLabelCanvas = () => {
+    // E. Create High-Resolution Front Label Canvas Texture (2048 x 2048)
+    const createFrontLabelCanvas = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1024;
+      canvas.width = 2048;
+      canvas.height = 2048;
       const ctx = canvas.getContext('2d');
       if (!ctx) return canvas;
 
-      // Matte Black Finish
-      ctx.fillStyle = '#07080c';
-      ctx.fillRect(0, 0, 1024, 1024);
+      // Transparent Background (Text printed directly on black bottle face)
+      ctx.clearRect(0, 0, 2048, 2048);
 
-      // Outer Gold Border
-      ctx.strokeStyle = '#d4af37';
-      ctx.lineWidth = 12;
-      ctx.strokeRect(32, 32, 960, 960);
-
-      // Inner Gold Border
-      ctx.lineWidth = 4;
-      ctx.strokeRect(48, 48, 928, 928);
-
-      // Emblem
-      ctx.fillStyle = '#d4af37';
-      ctx.font = '900 64px serif';
+      ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
-      ctx.fillText('⚜', 512, 180);
 
-      ctx.font = '900 44px sans-serif';
-      ctx.letterSpacing = '10px';
-      ctx.fillText('F R A S M E T I C S', 512, 270);
+      // 1. Brand Name: FRASMETICS
+      ctx.font = '900 130px "Inter", "Helvetica Neue", sans-serif';
+      ctx.letterSpacing = '14px';
+      ctx.fillText('FRASMETICS', 1024, 520);
 
-      ctx.fillStyle = '#a0a0a0';
-      ctx.font = '600 24px sans-serif';
-      ctx.letterSpacing = '12px';
-      ctx.fillText('P A R I S', 512, 320);
+      // 2. Sub-brand: FRANCE
+      ctx.font = '600 52px "Inter", "Helvetica Neue", sans-serif';
+      ctx.letterSpacing = '20px';
+      ctx.fillText('F R A N C E', 1024, 620);
 
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
-      ctx.lineWidth = 2;
+      // 3. Product Title: ON A DATE
+      ctx.font = '900 150px "Inter", "Helvetica Neue", sans-serif';
+      ctx.letterSpacing = '8px';
+      ctx.fillText(titleText, 1024, 940);
+
+      // 4. Volume / Concentration Bar
+      ctx.font = '700 44px "Inter", "Helvetica Neue", sans-serif';
+      ctx.letterSpacing = '4px';
+      ctx.textAlign = 'left';
+      ctx.fillText('EAU DE PARFUM', 260, 1140);
+
+      ctx.textAlign = 'right';
+      ctx.fillText('50ML / 1.7 FL.OZ.', 1788, 1140);
+
+      // 5. Gender / Line Divider ——— MAN ———
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.moveTo(256, 370);
-      ctx.lineTo(768, 370);
+      ctx.moveTo(260, 1220);
+      ctx.lineTo(820, 1220);
       ctx.stroke();
 
-      // Title
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 56px serif';
+      ctx.font = '700 40px "Inter", "Helvetica Neue", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.letterSpacing = '10px';
+      ctx.fillText('MAN', 1024, 1232);
+
+      ctx.beginPath();
+      ctx.moveTo(1228, 1220);
+      ctx.lineTo(1788, 1220);
+      ctx.stroke();
+
+      // 6. Manifesto lines
+      ctx.font = '700 38px "Inter", "Helvetica Neue", sans-serif';
       ctx.letterSpacing = '4px';
-      ctx.fillText(titleText, 512, 470);
+      ctx.fillText('FRASMETICS CRAFTS NICHE FRAGRANCES.', 1024, 1370);
 
-      // Details Box
-      ctx.fillStyle = 'rgba(255,255,255,0.04)';
-      ctx.fillRect(128, 520, 768, 280);
+      ctx.font = '600 34px "Inter", "Helvetica Neue", sans-serif';
+      ctx.letterSpacing = '4px';
+      ctx.fillText('MODERN ARTISTRY. TIMELESS LUXURY.', 1024, 1435);
 
-      ctx.fillStyle = '#cccccc';
-      ctx.font = '500 22px sans-serif';
-      ctx.letterSpacing = '2px';
-      ctx.fillText('HAUTE PARFUMERIE DE GRASSE', 512, 570);
-      ctx.fillText('EAU DE PARFUM · 50ML / 1.7 FL. OZ.', 512, 620);
-      ctx.fillText('ALCOHOL DENAT., PARFUM, AQUA, OUD.', 512, 670);
+      return canvas;
+    };
 
-      ctx.fillStyle = '#d4af37';
-      ctx.font = '700 22px monospace';
-      ctx.fillText('BATCH N° 2026-FR50 · LOT 01', 512, 740);
+    const frontTexture = new THREE.CanvasTexture(createFrontLabelCanvas());
+    frontTexture.colorSpace = THREE.SRGBColorSpace;
+    frontTexture.needsUpdate = true;
 
-      ctx.fillStyle = '#d4af37';
-      ctx.font = '600 20px sans-serif';
+    // Front Label Plane (Flush with front face of bottle body)
+    const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.92, bodyHeight * 0.92);
+    const frontPlaneMat = new THREE.MeshBasicMaterial({
+      map: frontTexture,
+      transparent: true,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
+    });
+    const frontPlaneMesh = new THREE.Mesh(frontPlaneGeo, frontPlaneMat);
+    frontPlaneMesh.position.set(0, bodyMesh.position.y, bodyDepth / 2 + 0.032);
+    bottleGroup.add(frontPlaneMesh);
+
+    // F. Create High-Resolution Back Label Canvas Texture (2048 x 2048)
+    const createBackLabelCanvas = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 2048;
+      canvas.height = 2048;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return canvas;
+
+      ctx.clearRect(0, 0, 2048, 2048);
+
+      // Matte Plaque Background
+      ctx.fillStyle = 'rgba(15, 16, 22, 0.95)';
+      ctx.roundRect(150, 150, 1748, 1748, 40);
+      ctx.fill();
+
+      // Metallic Gold Border
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 14;
+      ctx.roundRect(170, 170, 1708, 1708, 30);
+      ctx.stroke();
+
+      ctx.fillStyle = '#D4AF37';
+      ctx.textAlign = 'center';
+      ctx.font = '900 110px serif';
+      ctx.fillText('⚜', 1024, 380);
+
+      ctx.font = '900 70px "Inter", sans-serif';
+      ctx.letterSpacing = '12px';
+      ctx.fillText('F R A S M E T I C S', 1024, 520);
+
+      ctx.fillStyle = '#A0A0A0';
+      ctx.font = '600 40px "Inter", sans-serif';
+      ctx.letterSpacing = '16px';
+      ctx.fillText('P A R I S', 1024, 600);
+
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(400, 680);
+      ctx.lineTo(1648, 680);
+      ctx.stroke();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '900 90px serif';
       ctx.letterSpacing = '6px';
-      ctx.fillText('MADE IN FRANCE · FABRIQUÉ EN FRANCE', 512, 880);
+      ctx.fillText(titleText, 1024, 840);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillRect(300, 930, 1448, 480);
+
+      ctx.fillStyle = '#CCCCCC';
+      ctx.font = '600 38px "Inter", sans-serif';
+      ctx.letterSpacing = '4px';
+      ctx.fillText('HAUTE PARFUMERIE DE GRASSE', 1024, 1020);
+      ctx.fillText('EAU DE PARFUM · 50ML / 1.7 FL. OZ.', 1024, 1110);
+      ctx.fillText('ALCOHOL DENAT., PARFUM, AQUA, OUD.', 1024, 1200);
+
+      ctx.fillStyle = '#D4AF37';
+      ctx.font = '700 38px monospace';
+      ctx.fillText('BATCH N° 2026-FR50 · LOT 01', 1024, 1330);
+
+      ctx.fillStyle = '#D4AF37';
+      ctx.font = '600 36px "Inter", sans-serif';
+      ctx.letterSpacing = '8px';
+      ctx.fillText('MADE IN FRANCE · FABRIQUÉ EN FRANCE', 1024, 1620);
 
       return canvas;
     };
 
     const backTexture = new THREE.CanvasTexture(createBackLabelCanvas());
     backTexture.colorSpace = THREE.SRGBColorSpace;
+    backTexture.needsUpdate = true;
 
-    const backPlaqueWidth = rWidth * 0.88;
-    const backPlaqueHeight = rHeight * 0.75;
+    const backPlaqueWidth = bodyWidth * 0.88;
+    const backPlaqueHeight = bodyHeight * 0.78;
     const backPlaqueGeo = new THREE.PlaneGeometry(backPlaqueWidth, backPlaqueHeight);
-
     const backPlaqueMat = new THREE.MeshStandardMaterial({
       map: backTexture,
-      roughness: 0.2,
-      metalness: 0.15,
+      transparent: true,
+      roughness: 0.15,
+      metalness: 0.2,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
     });
     const backPlaqueMesh = new THREE.Mesh(backPlaqueGeo, backPlaqueMat);
-    backPlaqueMesh.position.set(0, bodyMesh.position.y, -bottleDepth / 2 - 0.025);
-    backPlaqueMesh.rotation.y = Math.PI; // Face outwards to the back
+    backPlaqueMesh.position.set(0, bodyMesh.position.y, -bodyDepth / 2 - 0.032);
+    backPlaqueMesh.rotation.y = Math.PI; // Face outwards to back
     bottleGroup.add(backPlaqueMesh);
-
-    // Gold Bezel Frame behind Back Plaque
-    const backFrameGeo = new THREE.PlaneGeometry(backPlaqueWidth + 0.04, backPlaqueHeight + 0.04);
-    const backFrameMesh = new THREE.Mesh(backFrameGeo, goldMaterial);
-    backFrameMesh.position.set(0, bodyMesh.position.y, -bottleDepth / 2 - 0.021);
-    backFrameMesh.rotation.y = Math.PI;
-    bottleGroup.add(backFrameMesh);
 
     scene.add(bottleGroup);
 
-    // H. Dark Obsidian Mirror Pedestal Base
+    // G. Obsidian Dark Pedestal Base
     const pedestalGeo = new THREE.CylinderGeometry(2.3, 2.4, 0.16, 64);
     const pedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x070b18,
-      roughness: 0.08,
-      metalness: 0.9,
+      color: 0x060810,
+      roughness: 0.06,
+      metalness: 0.95,
+      envMapIntensity: 1.2,
     });
     const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestalMesh.position.y = -totalHeight / 2 - 0.12;
+    pedestalMesh.position.y = -2.1;
     pedestalMesh.receiveShadow = true;
     scene.add(pedestalMesh);
 
-    // Soft Ground Contact Shadow
+    // Soft Contact Shadow
     const shadowGeo = new THREE.RingGeometry(0.1, 2.2, 32);
     const shadowMat = new THREE.MeshBasicMaterial({
       color: 0x000000,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.75,
       side: THREE.DoubleSide,
     });
     const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
     shadowMesh.rotation.x = Math.PI / 2;
-    shadowMesh.position.y = pedestalMesh.position.y + 0.08;
+    shadowMesh.position.y = pedestalMesh.position.y + 0.085;
     scene.add(shadowMesh);
 
-    // 5. Pointer Drag Logic (Smooth 360 Rotation & Tilt)
+    // 6. Smooth Pointer Drag & Touch Controls (360° rotation & tilt with Damping)
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
@@ -350,7 +418,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
 
-    // Mobile Touch Handlers
+    // Touch Handlers
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
         isDragging = true;
@@ -376,20 +444,20 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 6. Animation Loop (Smooth Interp & Continuous Idle Rotation)
+    // 7. Render Animation Loop (Smooth Interp & Idle Floating Animation)
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       if (!isDragging) {
-        targetRotationY += 0.005; // Smooth continuous 360 degree rotation when idle
+        targetRotationY += 0.005; // Idle 360 degree rotation
         targetRotationX *= 0.95;
       }
 
       bottleGroup.rotation.y += (targetRotationY - bottleGroup.rotation.y) * 0.08;
       bottleGroup.rotation.x += (targetRotationX - bottleGroup.rotation.x) * 0.08;
 
-      // Gentle levitation
-      bottleGroup.position.y = Math.sin(Date.now() * 0.0018) * 0.04;
+      // Gentle levitation oscillation
+      bottleGroup.position.y = Math.sin(Date.now() * 0.0018) * 0.035;
 
       renderer.render(scene, camera);
     };
