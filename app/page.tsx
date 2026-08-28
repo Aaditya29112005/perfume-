@@ -4,6 +4,7 @@ import { GhostWordmark } from '@/components/GhostWordmark';
 import { AccordsGallery } from '@/components/home/AccordsGallery';
 import { StatementSection } from '@/components/home/StatementSection';
 import { PairDisc } from '@/components/PairDisc';
+import { BentoGallerySection } from '@/components/home/BentoGallerySection';
 import { ShopCollection } from '@/components/home/ShopCollection';
 import { LaMaisonTeaser } from '@/components/home/LaMaisonTeaser';
 import { LeCercleNewsletter } from '@/components/home/LeCercleNewsletter';
@@ -25,6 +26,9 @@ export default function HomePage() {
 
       {/* 6.6 The Palette Moment Pair Device */}
       <PairDisc />
+
+      {/* GSAP Flip + ScrollTrigger Bento Gallery */}
+      <BentoGallerySection />
 
       {/* 6.7 Shop The Collection */}
       <ShopCollection />
