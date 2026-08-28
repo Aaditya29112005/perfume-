@@ -2,103 +2,87 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useAppStore } from '@/lib/store';
-import { PRODUCTS, Product } from '@/lib/products';
 import { Volume2, VolumeX, Lock } from 'lucide-react';
+import { useAppStore } from '@/lib/store';
+import { PRODUCTS } from '@/lib/products';
+import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 
-interface AccordStageItem {
-  id: string;
-  number: string;
-  name: string;
-  frenchEcho: string;
-  description: string;
-  topNote: string;
-  heartNote: string;
-  baseNote: string;
-  price: number;
-  originalPrice: number;
-  discount: string;
-  bgGradient: string;
-  imageSrc: string;
-  product: Product;
-}
-
-const ACCORDS_STAGE: AccordStageItem[] = [
+const ACCORDS_STAGE = [
+  {
+    id: 'on-a-date',
+    number: 'HAUTE ACCORD 01 / 05',
+    name: 'ON A DATE',
+    frenchEcho: '*L\'étincelle romantique*',
+    description:
+      'An evocative olfactory journey capturing the electric romance of a Paris evening. Bright Calabrian bergamot yields to an intoxicating heart of golden amber resin, anchored by velvety cashmere musk.',
+    topNote: 'Calabrian Bergamot',
+    heartNote: 'Golden Amber Resin',
+    baseNote: 'Velvety Cashmere Musk',
+    price: 180,
+    originalPrice: 240,
+    discount: '-25% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(35, 15, 20, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+    imageSrc: '/oad50.png',
+    product: PRODUCTS[0],
+  },
   {
     id: 'heritage-oud',
-    number: 'ACCORD #01',
-    name: "HÉRITAGE D'OUD",
-    frenchEcho: '“Le rendez-vous parfait.”',
+    number: 'HAUTE ACCORD 02 / 05',
+    name: 'HERITAGE OUD',
+    frenchEcho: '*L\'héritage impérial*',
     description:
-      'Frasmetics crafts niche fragrances at the meeting point of French perfumery tradition and contemporary design.',
-    topNote: 'Cambodian Oud',
-    heartNote: 'Russian Leather',
-    baseNote: 'Patchouli',
-    price: 160,
-    originalPrice: 220,
-    discount: '-27% OFF',
-    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(15, 27, 61, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+      'A majestic tribute to ancient Middle Eastern perfumery. Aged Cambodian agarwood is laced with Taif rose petals, smoked incense, and rich saffron threads.',
+    topNote: 'Taif Rose & Saffron',
+    heartNote: 'Aged Cambodian Oud',
+    baseNote: 'Smoked Incense & Amber',
+    price: 210,
+    originalPrice: 280,
+    discount: '-25% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(45, 30, 10, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
     imageSrc: '/hdo50.png',
     product: PRODUCTS[1],
   },
   {
     id: 'oud-rouge',
-    number: 'ACCORD #02',
+    number: 'HAUTE ACCORD 03 / 05',
     name: 'OUD ROUGE',
-    frenchEcho: '“L’incendie écarlate.”',
+    frenchEcho: '*La passion écarlate*',
     description:
-      'A fiery crimson composition of rare Persian saffron strands, May Rose Centifolia petals, and charred agarwood resin.',
-    topNote: 'Red Saffron',
-    heartNote: 'Damask Rose',
-    baseNote: 'Smoked Oud',
-    price: 175,
-    originalPrice: 240,
-    discount: '-27% OFF',
-    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(70, 10, 20, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+      'A fiery synthesis of crimson spices and dark resinous woods. Crimson rose oxide dances over burning cedar and rare red agarwood.',
+    topNote: 'Crimson Rose Oxide',
+    heartNote: 'Red Agarwood (Oud)',
+    baseNote: 'Atlas Cedar & Leather',
+    price: 195,
+    originalPrice: 260,
+    discount: '-25% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(55, 10, 15, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
     imageSrc: '/or50.png',
     product: PRODUCTS[2],
   },
   {
-    id: 'prive-nuit',
-    number: 'ACCORD #03',
-    name: 'PRIVÉ NUIT',
-    frenchEcho: '“Le secret de minuit.”',
+    id: 'pure-nuit',
+    number: 'HAUTE ACCORD 04 / 05',
+    name: 'PURE NUIT',
+    frenchEcho: '*L\'obscurité céleste*',
     description:
-      'An enigmatic nocturnal elixir blending dark midnight plum, powdery Florentine iris root, and smoked black amber crystals.',
-    topNote: 'Midnight Plum',
-    heartNote: 'Velvet Iris',
-    baseNote: 'Black Amber',
-    price: 165,
-    originalPrice: 225,
+      'An enigmatic nocturnal composition. Midnight jasmine wrapped in dark vanilla bean, Tonka absolute, and mysterious black musk.',
+    topNote: 'Midnight Jasmine',
+    heartNote: 'Madagascar Vanilla Bean',
+    baseNote: 'Tonka & Black Musk',
+    price: 185,
+    originalPrice: 250,
     discount: '-26% OFF',
-    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(35, 15, 60, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(15, 15, 35, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
     imageSrc: '/pn50.png',
     product: PRODUCTS[3],
   },
   {
-    id: 'on-a-date',
-    number: 'ACCORD #04',
-    name: 'ON A DATE',
-    frenchEcho: '“L’étincelle romantique.”',
-    description:
-      'An evocative olfactory journey capturing the electric romance of a Paris evening with Calabrian bergamot and golden amber.',
-    topNote: 'Calabrian Bergamot',
-    heartNote: 'Golden Amber',
-    baseNote: 'Cashmere Musk',
-    price: 185,
-    originalPrice: 260,
-    discount: '-28% OFF',
-    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(65, 45, 15, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
-    imageSrc: '/oad50.png',
-    product: PRODUCTS[0],
-  },
-  {
     id: 'tobacco-whiskey',
-    number: 'ACCORD #05',
+    number: 'HAUTE ACCORD 05 / 05',
     name: 'TOBACCO & WHISKEY',
-    frenchEcho: '“L’élixir des épicuriens.”',
+    frenchEcho: '*Le club des gentlemen*',
     description:
-      'A hedonistic blend of cured Cuban tobacco leaves steeped in aged single malt whiskey with Madagascar bourbon vanilla.',
+      'An opulent speakeasy accord featuring blonde Virginia tobacco leaves steeped in aged single malt whiskey, bourbon vanilla, and spiced oak barrels.',
     topNote: 'Blonde Tobacco',
     heartNote: 'Single Malt Whiskey',
     baseNote: 'Bourbon Vanilla',
@@ -227,17 +211,24 @@ export default function FiveAccordsPage() {
             </div>
           </div>
 
-          {/* Right Column: High-Definition Product Bottle Image Showcase */}
-          <div className="lg:col-span-6 h-[460px] md:h-[560px] relative flex items-center justify-center">
+          {/* Right Column: 3D Flacon Viewer for ON A DATE / High-Definition Bottle Image for Other Accords */}
+          <div className="lg:col-span-6 h-[500px] md:h-[600px] relative flex items-center justify-center">
             <div className={`relative w-full h-full flex items-center justify-center transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-              <Image
-                src={activeAccord.imageSrc}
-                alt={activeAccord.name}
-                width={380}
-                height={520}
-                priority
-                className="object-contain max-h-[90%] w-auto transition-all duration-500 drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] hover:scale-105"
-              />
+              {activeIndex === 0 ? (
+                <FlaconViewer3D
+                  imageSrc={activeAccord.imageSrc}
+                  altText={`${activeAccord.name} 3D Flacon`}
+                />
+              ) : (
+                <Image
+                  src={activeAccord.imageSrc}
+                  alt={activeAccord.name}
+                  width={380}
+                  height={520}
+                  priority
+                  className="object-contain max-h-[90%] w-auto transition-all duration-500 drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] hover:scale-105"
+                />
+              )}
             </div>
           </div>
 
