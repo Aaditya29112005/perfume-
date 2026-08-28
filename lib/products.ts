@@ -13,7 +13,7 @@ export interface Product {
   descriptor: string;
   category: 'boise' | 'oriental' | 'frais' | 'gourmand';
   notes: ProductNote;
-  sceneGround: string; // hex scene ground
+  sceneGround: string;
   accentColor: string;
   price50ml: number;
   price100ml: number;
@@ -58,78 +58,22 @@ export const PRODUCTS: Product[] = [
     },
   },
   {
-    id: 'oud-rouge',
-    handle: 'oud-rouge',
+    id: 'heritage-oud',
+    handle: 'heritage-oud',
     number: 'ACCORD 02',
-    name: 'OUD ROUGE',
-    frenchEcho: 'Le feu des bois rares',
-    descriptor: 'RED SAFFRON · CAMBODIAN OUD',
-    category: 'boise',
-    notes: {
-      top: 'Red Saffron',
-      heart: 'Smoked Sandalwood',
-      base: 'Cambodian Oud',
-    },
-    sceneGround: '#1A3AA8',
-    accentColor: '#C8102E',
-    price50ml: 210,
-    price100ml: 295,
-    bgImage: '/bg_oud_rouge.jpg',
-    bottleImage50ml: '/or50.png',
-    bottleImage20ml: '/or20.png',
-    description:
-      'A fiery symphony of crimson red saffron and aged Cambodian oud. Smoked sandalwood embers intertwine with royal spices for an indelible, regal sillage.',
-    pyramidDetails: {
-      topDetail: 'Pure crimson red saffron threads harvested at dawn.',
-      heartDetail: 'Smoked Mysore sandalwood aged in charred oak barrels.',
-      baseDetail: 'Rare wild Cambodian oud oil with deep balsamic resonance.',
-    },
-  },
-  {
-    id: 'prive-nuit',
-    handle: 'prive-nuit',
-    number: 'ACCORD 03',
-    name: 'PRIVÉ NUIT',
-    frenchEcho: "L'ombre de la nuit",
-    descriptor: 'FLORENTINE IRIS · MIDNIGHT AMBER',
-    category: 'oriental',
-    notes: {
-      top: 'Florentine Iris',
-      heart: 'Midnight Leather',
-      base: 'Black Amber',
-    },
-    sceneGround: '#070B18',
-    accentColor: '#1A3AA8',
-    price50ml: 195,
-    price100ml: 275,
-    bgImage: '/bg_prive_nuit.jpg',
-    bottleImage50ml: '/pn50.png',
-    bottleImage20ml: '/pn20.png',
-    description:
-      'The secretive aura of a midnight rendez-vous in Paris. Precious Florentine iris butter melts into dark midnight leather and animalic black amber.',
-    pyramidDetails: {
-      topDetail: 'Rare Florentine Iris Pallida butter aged for three years.',
-      heartDetail: 'Tanned midnight leather with subtle accords of dark violet.',
-      baseDetail: 'Deep Baltic black amber with smoky incense facets.',
-    },
-  },
-  {
-    id: 'heritage-d-oud',
-    handle: 'heritage-d-oud',
-    number: 'ACCORD 04',
     name: "HÉRITAGE D'OUD",
-    frenchEcho: 'La royauté séculaire',
-    descriptor: 'SMOKED WOOD · OUD EXTRAIT',
+    frenchEcho: "L'héritage d'Orient à Paris",
+    descriptor: 'ASSAM OUD · CARDAMOM · CEDARWOOD',
     category: 'boise',
     notes: {
-      top: 'Cardamom Pods',
+      top: 'Green Cardamom',
       heart: 'Atlas Cedarwood',
-      base: 'Aged Assam Oud',
+      base: 'Wild Assam Oud',
     },
-    sceneGround: '#1A3AA8',
-    accentColor: '#D4AF37',
-    price50ml: 240,
-    price100ml: 340,
+    sceneGround: '#0F1B3D',
+    accentColor: '#C8102E',
+    price50ml: 190,
+    price100ml: 270,
     bgImage: '/bg_heritage_oud.jpg',
     bottleImage50ml: '/hdo50.png',
     bottleImage20ml: '/hdo20.png',
@@ -142,22 +86,78 @@ export const PRODUCTS: Product[] = [
     },
   },
   {
+    id: 'oud-rouge',
+    handle: 'oud-rouge',
+    number: 'ACCORD 03',
+    name: 'OUD ROUGE',
+    frenchEcho: "L'incendie écarlate",
+    descriptor: 'RED SAFFRON · DAMASK ROSE · SMOKED OUD',
+    category: 'oriental',
+    notes: {
+      top: 'Red Saffron',
+      heart: 'Damask Rose',
+      base: 'Smoked Oud',
+    },
+    sceneGround: '#0F1B3D',
+    accentColor: '#C8102E',
+    price50ml: 175,
+    price100ml: 240,
+    bgImage: '/bg_oud_rouge.jpg',
+    bottleImage50ml: '/or50.png',
+    bottleImage20ml: '/or20.png',
+    description:
+      'A fiery crimson composition of rare Persian saffron strands, May Rose petals, and charred agarwood resin.',
+    pyramidDetails: {
+      topDetail: 'First-harvest Persian red saffron threads.',
+      heartDetail: 'Hand-picked May Rose Centifolia petals from Grasse.',
+      baseDetail: 'Smoked Assam agarwood charred over fruitwood embers.',
+    },
+  },
+  {
+    id: 'prive-nuit',
+    handle: 'prive-nuit',
+    number: 'ACCORD 04',
+    name: 'PRIVÉ NUIT',
+    frenchEcho: 'Le secret de minuit',
+    descriptor: 'MIDNIGHT PLUM · VELVET IRIS · BLACK AMBER',
+    category: 'frais',
+    notes: {
+      top: 'Midnight Plum',
+      heart: 'Velvet Iris',
+      base: 'Black Amber',
+    },
+    sceneGround: '#0F1B3D',
+    accentColor: '#C8102E',
+    price50ml: 165,
+    price100ml: 225,
+    bgImage: '/bg_prive_nuit.jpg',
+    bottleImage50ml: '/pn50.png',
+    bottleImage20ml: '/pn20.png',
+    description:
+      'An enigmatic nocturnal elixir blending dark midnight plum, powdery Florentine iris root, and smoked black amber crystals.',
+    pyramidDetails: {
+      topDetail: 'Dark French midnight plum skin extract.',
+      heartDetail: 'Aged Florentine violet iris root butter.',
+      baseDetail: 'Rare Baltic black amber resin.',
+    },
+  },
+  {
     id: 'tobacco-whiskey',
     handle: 'tobacco-whiskey',
     number: 'ACCORD 05',
     name: 'TOBACCO & WHISKEY',
     frenchEcho: "L'élixir des épicuriens",
-    descriptor: 'BLONDE TOBACCO · VINTAGE MALT',
+    descriptor: 'BLONDE TOBACCO · VINTAGE MALT · BOURBON VANILLA',
     category: 'oriental',
     notes: {
       top: 'Blonde Tobacco',
       heart: 'Single Malt Whiskey',
-      base: 'Vanilla Bean',
+      base: 'Bourbon Vanilla',
     },
     sceneGround: '#0F1B3D',
     accentColor: '#C8102E',
-    price50ml: 200,
-    price100ml: 285,
+    price50ml: 170,
+    price100ml: 230,
     bgImage: '/bg_tobacco_whiskey.jpg',
     bottleImage50ml: '/tw50.png',
     bottleImage20ml: '/tw20.png',
@@ -187,8 +187,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 180,
     price100ml: 255,
     bgImage: '/bg_tobacco_wine_vanilla.jpg',
-    bottleImage50ml: '/oad50.png',
-    bottleImage20ml: '/oad20.png',
+    bottleImage50ml: '/twv50.png',
+    bottleImage20ml: '/twv20.png',
     description:
       'An opulent gourmand masterpiece merging rich Bordeaux wine reduction with velvety cured tobacco and dark bourbon vanilla pods.',
     pyramidDetails: {
@@ -215,8 +215,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 175,
     price100ml: 245,
     bgImage: '/bg_rose_wood_oud.jpg',
-    bottleImage50ml: '/or50.png',
-    bottleImage20ml: '/or20.png',
+    bottleImage50ml: '/rwo50.png',
+    bottleImage20ml: '/rwo20.png',
     description:
       'Freshly blooming May roses from Grasse draped over dark polished Brazilian rosewood and warm smoky amber oud.',
     pyramidDetails: {
@@ -243,8 +243,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 195,
     price100ml: 275,
     bgImage: '/bg_saffron_amber_oud.jpg',
-    bottleImage50ml: '/pn50.png',
-    bottleImage20ml: '/pn20.png',
+    bottleImage50ml: '/sao50.png',
+    bottleImage20ml: '/sao20.png',
     description:
       'Luminous golden amber infused with rare Persian saffron and aged smoked oud. A scent of radiant luxury and timeless grandeur.',
     pyramidDetails: {
@@ -271,8 +271,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 205,
     price100ml: 290,
     bgImage: '/bg_saffron_amber_oud.jpg',
-    bottleImage50ml: '/hdo50.png',
-    bottleImage20ml: '/hdo20.png',
+    bottleImage50ml: '/lhm50.png',
+    bottleImage20ml: '/lhm20.png',
     description:
       'Sensual raw Tuscan leather softened by golden wildflower honey and wrapped in a cloud of velvety cashmere musk.',
     pyramidDetails: {
@@ -299,8 +299,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 215,
     price100ml: 300,
     bgImage: '/bg_tobacco_whiskey.jpg',
-    bottleImage50ml: '/tw50.png',
-    bottleImage20ml: '/tw20.png',
+    bottleImage50ml: '/itf50.png',
+    bottleImage20ml: '/itf20.png',
     description:
       'An intoxicating dual harmony of white night-blooming jasmine and smoked Cuban tobacco leaves resting on a bed of Damask rose.',
     pyramidDetails: {
@@ -327,8 +327,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 225,
     price100ml: 315,
     bgImage: '/bg_oud_rouge.jpg',
-    bottleImage50ml: '/oad50.png',
-    bottleImage20ml: '/oad20.png',
+    bottleImage50ml: '/lat50.png',
+    bottleImage20ml: '/taw20.png',
     description:
       'A powerful triadic accord of black saddle leather, warm glowing amber resin, and rich aromatically aged pipe tobacco.',
     pyramidDetails: {
@@ -355,8 +355,8 @@ export const PRODUCTS: Product[] = [
     price50ml: 250,
     price100ml: 350,
     bgImage: '/bg_prive_nuit.jpg',
-    bottleImage50ml: '/or50.png',
-    bottleImage20ml: '/or20.png',
+    bottleImage50ml: '/cn50.png',
+    bottleImage20ml: '/cn50.png',
     description:
       'The ultimate Extrait de Parfum concentration. Icy cold spices dissolve into mysterious indigo amber and high-altitude wild oud.',
     pyramidDetails: {
