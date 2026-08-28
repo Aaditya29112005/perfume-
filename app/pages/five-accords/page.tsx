@@ -1,122 +1,116 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 import { useAppStore } from '@/lib/store';
 import { PRODUCTS, Product } from '@/lib/products';
-import { Volume2, VolumeX, ShoppingBag, Lock, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Lock } from 'lucide-react';
 
-interface AccordStageData {
-  number: string;
+interface AccordStageItem {
   id: string;
+  number: string;
   name: string;
   frenchEcho: string;
   description: string;
+  topNote: string;
+  heartNote: string;
+  baseNote: string;
   price: number;
   originalPrice: number;
   discount: string;
   bgGradient: string;
-  accentColor: string;
   imageSrc: string;
-  topNote: string;
-  heartNote: string;
-  baseNote: string;
   product: Product;
 }
 
-const ACCORDS_STAGE: AccordStageData[] = [
+const ACCORDS_STAGE: AccordStageItem[] = [
   {
-    number: 'ACCORD #01',
     id: 'heritage-oud',
+    number: 'ACCORD #01',
     name: "HÉRITAGE D'OUD",
-    frenchEcho: '"Le rendez-vous parfait."',
+    frenchEcho: '“Le rendez-vous parfait.”',
     description:
       'Frasmetics crafts niche fragrances at the meeting point of French perfumery tradition and contemporary design.',
-    price: 160,
-    originalPrice: 220,
-    discount: '-27% OFF',
-    bgGradient: 'radial-gradient(circle at 65% 50%, #1A284D 0%, #070B1A 90%)',
-    accentColor: '#1A284D',
-    imageSrc: '/hdo50.png',
     topNote: 'Cambodian Oud',
     heartNote: 'Russian Leather',
     baseNote: 'Patchouli',
-    product: PRODUCTS.find((p) => p.id === 'heritage-oud') || PRODUCTS[1],
+    price: 160,
+    originalPrice: 220,
+    discount: '-27% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(15, 27, 61, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+    imageSrc: '/hdo50.png',
+    product: PRODUCTS[1],
   },
   {
-    number: 'ACCORD #02',
     id: 'oud-rouge',
+    number: 'ACCORD #02',
     name: 'OUD ROUGE',
-    frenchEcho: '"L\'incendie écarlate."',
+    frenchEcho: '“L’incendie écarlate.”',
     description:
-      'A fiery crimson composition of saffron strands, May Rose, and agarwood resin.',
-    price: 175,
-    originalPrice: 240,
-    discount: '-27% OFF',
-    bgGradient: 'radial-gradient(circle at 65% 50%, #4D121A 0%, #0D0507 90%)',
-    accentColor: '#4D121A',
-    imageSrc: '/or50.png',
+      'A fiery crimson composition of rare Persian saffron strands, May Rose Centifolia petals, and charred agarwood resin.',
     topNote: 'Red Saffron',
     heartNote: 'Damask Rose',
     baseNote: 'Smoked Oud',
-    product: PRODUCTS.find((p) => p.id === 'oud-rouge') || PRODUCTS[2],
+    price: 175,
+    originalPrice: 240,
+    discount: '-27% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(70, 10, 20, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+    imageSrc: '/or50.png',
+    product: PRODUCTS[2],
   },
   {
-    number: 'ACCORD #03',
     id: 'prive-nuit',
+    number: 'ACCORD #03',
     name: 'PRIVÉ NUIT',
-    frenchEcho: '"Le secret de minuit."',
+    frenchEcho: '“Le secret de minuit.”',
     description:
-      'An enigmatic nocturnal elixir blending dark plum, velvet iris, and smoked amber.',
-    price: 165,
-    originalPrice: 225,
-    discount: '-26% OFF',
-    bgGradient: 'radial-gradient(circle at 65% 50%, #2A1542 0%, #090412 90%)',
-    accentColor: '#2A1542',
-    imageSrc: '/pn50.png',
+      'An enigmatic nocturnal elixir blending dark midnight plum, powdery Florentine iris root, and smoked black amber crystals.',
     topNote: 'Midnight Plum',
     heartNote: 'Velvet Iris',
     baseNote: 'Black Amber',
-    product: PRODUCTS.find((p) => p.id === 'prive-nuit') || PRODUCTS[3],
+    price: 165,
+    originalPrice: 225,
+    discount: '-26% OFF',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(35, 15, 60, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
+    imageSrc: '/pn50.png',
+    product: PRODUCTS[3],
   },
   {
-    number: 'ACCORD #04',
     id: 'on-a-date',
+    number: 'ACCORD #04',
     name: 'ON A DATE',
-    frenchEcho: '"L\'étincelle romantique."',
+    frenchEcho: '“L’étincelle romantique.”',
     description:
-      'An evocative olfactory journey capturing the electric romance of a Paris evening.',
+      'An evocative olfactory journey capturing the electric romance of a Paris evening with Calabrian bergamot and golden amber.',
+    topNote: 'Calabrian Bergamot',
+    heartNote: 'Golden Amber',
+    baseNote: 'Cashmere Musk',
     price: 185,
     originalPrice: 260,
     discount: '-28% OFF',
-    bgGradient: 'radial-gradient(circle at 65% 50%, #3D2612 0%, #0F0904 90%)',
-    accentColor: '#3D2612',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(65, 45, 15, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
     imageSrc: '/oad50.png',
-    topNote: 'Calabrian Bergamot',
-    heartNote: 'Golden Amber Resin',
-    baseNote: 'Cashmere Musk',
-    product: PRODUCTS.find((p) => p.id === 'on-a-date') || PRODUCTS[0],
+    product: PRODUCTS[0],
   },
   {
-    number: 'ACCORD #05',
     id: 'tobacco-whiskey',
+    number: 'ACCORD #05',
     name: 'TOBACCO & WHISKEY',
-    frenchEcho: '"Le club privé parisien."',
+    frenchEcho: '“L’élixir des épicuriens.”',
     description:
-      'Barrel-aged bourbon liquor infused with cured Havana tobacco and Madagascar vanilla bean.',
+      'A hedonistic blend of cured Cuban tobacco leaves steeped in aged single malt whiskey with Madagascar bourbon vanilla.',
+    topNote: 'Blonde Tobacco',
+    heartNote: 'Single Malt Whiskey',
+    baseNote: 'Bourbon Vanilla',
     price: 170,
     originalPrice: 230,
     discount: '-26% OFF',
-    bgGradient: 'radial-gradient(circle at 65% 50%, #321B0F 0%, #0D0704 90%)',
-    accentColor: '#321B0F',
+    bgGradient: 'radial-gradient(circle at 60% 40%, rgba(55, 25, 10, 0.95) 0%, rgba(7, 11, 24, 1) 75%)',
     imageSrc: '/tw50.png',
-    topNote: 'Blonde Tobacco',
-    heartNote: 'Aged Whiskey',
-    baseNote: 'Bourbon Vanilla',
-    product: PRODUCTS.find((p) => p.id === 'tobacco-whiskey') || PRODUCTS[4] || PRODUCTS[0],
+    product: PRODUCTS[4],
   },
 ];
 
@@ -143,7 +137,7 @@ export default function FiveAccordsPage() {
       {/* Top Header */}
       <Navbar />
 
-      {/* Auxiliary Top Bar Sub-Menu (Matching Video Top Header Controls) */}
+      {/* Auxiliary Top Bar Sub-Menu */}
       <div className="fixed top-[64px] left-0 right-0 z-40 bg-black/40 backdrop-blur-md border-b border-[rgba(255,255,255,0.08)] py-2 px-6 md:px-16 flex items-center justify-between text-xs type-micro">
         <div className="flex items-center gap-6 text-gray-400 overflow-x-auto">
           <Link href="/" className="hover:text-white transition-colors">HOME</Link>
@@ -250,12 +244,16 @@ export default function FiveAccordsPage() {
             </div>
           </div>
 
-          {/* Right Column: 3D Interactive Bottle Flacon */}
+          {/* Right Column: High-Definition Product Bottle Image Showcase */}
           <div className="lg:col-span-6 h-[460px] md:h-[560px] relative flex items-center justify-center">
-            <div className={`w-full h-full transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-              <FlaconViewer3D
-                imageSrc={activeAccord.imageSrc}
-                altText={activeAccord.name}
+            <div className={`relative w-full h-full flex items-center justify-center transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+              <Image
+                src={activeAccord.imageSrc}
+                alt={activeAccord.name}
+                width={380}
+                height={520}
+                priority
+                className="object-contain max-h-[90%] w-auto transition-all duration-500 drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] hover:scale-105"
               />
             </div>
           </div>
@@ -263,7 +261,7 @@ export default function FiveAccordsPage() {
         </div>
       </main>
 
-      {/* Fixed Bottom Accord Dock Bar (Exact Section 04 Prototype Dock from Video) */}
+      {/* Fixed Bottom Accord Dock Bar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#070B1A]/90 backdrop-blur-xl border border-[rgba(255,255,255,0.15)] shadow-2xl flex items-center gap-1 p-1.5 max-w-[92vw] overflow-x-auto">
         {ACCORDS_STAGE.map((accord, index) => {
           const isActive = index === activeIndex;
