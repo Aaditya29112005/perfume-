@@ -31,12 +31,12 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const containerWidth = container.clientWidth || 500;
     const containerHeight = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup (Distance Z=9.8 & Y=-0.4 for a bolder, larger 3D flacon model presentation)
+    // 1. Scene & Camera Setup (Camera Y=0.45 & Z=10.8 for 100% Zero Top Clipping & Generous Headroom)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(28, containerWidth / containerHeight, 0.1, 1000);
     const isDesktop = containerWidth > 768;
     const cameraOffsetX = isDesktop ? -1.8 : 0;
-    camera.position.set(cameraOffsetX, -0.4, 9.8);
+    camera.position.set(cameraOffsetX, 0.45, 10.8);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -144,7 +144,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     });
 
     const bodyMesh = new THREE.Mesh(bodyGeo, obsidianGlassMaterial);
-    bodyMesh.position.y = -0.55;
+    bodyMesh.position.y = -0.75;
     bodyMesh.castShadow = true;
     bodyMesh.receiveShadow = true;
     bottleGroup.add(bodyMesh);
