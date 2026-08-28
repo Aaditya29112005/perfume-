@@ -7,6 +7,7 @@ import { initGSAP } from '@/lib/gsap';
 import { PRODUCTS } from '@/lib/products';
 import { GhostButton } from '@/components/Buttons';
 import { useAppStore } from '@/lib/store';
+import { FlaconViewer3D } from '@/components/FlaconViewer3D';
 
 export const HeroObserver: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -105,17 +106,13 @@ export const HeroObserver: React.FC = () => {
           </div>
         </div>
 
-        {/* Center/Right Column: Flacon Hero Display */}
-        <div className="relative flex-1 flex justify-center items-center h-[380px] md:h-[500px]">
-          <div className="relative w-64 md:w-80 h-full flex items-center justify-center">
-            <Image
+        {/* Center/Right Column: 3D Flacon Hero Interactive Display */}
+        <div className="relative flex-1 flex justify-center items-center h-[420px] md:h-[540px] w-full">
+          <div className="w-full h-full flex items-center justify-center">
+            <FlaconViewer3D
               key={currentProduct.id}
-              src={currentProduct.bottleImage50ml}
-              alt={currentProduct.name}
-              width={340}
-              height={440}
-              priority
-              className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)] max-h-full transition-all duration-700 hover:scale-105"
+              imageSrc={currentProduct.bottleImage50ml}
+              altText={`${currentProduct.name} 3D Flacon Model`}
             />
           </div>
         </div>
