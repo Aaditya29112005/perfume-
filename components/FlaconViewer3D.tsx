@@ -31,10 +31,10 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const containerWidth = container.clientWidth || 500;
     const containerHeight = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup (Refined Framing so top cap & bottom base fit 100% comfortably)
+    // 1. Scene & Camera Setup (Gives 100% Comfortable Headroom so Cap & Base Never Clip)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(28, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, -0.15, 7.4);
+    const camera = new THREE.PerspectiveCamera(30, containerWidth / containerHeight, 0.1, 1000);
+    camera.position.set(0, -0.25, 8.8);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -425,7 +425,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     <div className={`relative w-full h-full flex flex-col items-center justify-center outline-none border-none select-none ${className}`}>
       <div
         ref={mountRef}
-        className="w-full h-full min-h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none outline-none border-none"
+        className="w-full h-full min-h-[600px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none outline-none border-none"
       />
     </div>
   );
