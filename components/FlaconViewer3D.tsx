@@ -31,12 +31,12 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const containerWidth = container.clientWidth || 500;
     const containerHeight = container.clientHeight || 500;
 
-    // 1. Scene & Camera Setup (Camera Z=12.8 & Y=0.0 so FULL bottle from top cap to bottom base is 100% visible with ZERO clipping anywhere)
+    // 1. Scene & Camera Setup (Camera Z=11.5 & Y=0.0 to enlarge model slightly while keeping ZERO clipping anywhere)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(30, containerWidth / containerHeight, 0.1, 1000);
     const isDesktop = containerWidth > 768;
-    const cameraOffsetX = isDesktop ? -2.0 : 0;
-    camera.position.set(cameraOffsetX, 0.0, 12.8);
+    const cameraOffsetX = isDesktop ? -1.85 : 0;
+    camera.position.set(cameraOffsetX, 0.0, 11.5);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -399,7 +399,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       const h = container.clientHeight;
       camera.aspect = w / h;
       const isDesk = w > 768;
-      camera.position.x = isDesk ? -2.0 : 0;
+      camera.position.x = isDesk ? -1.85 : 0;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
       handleScroll();
