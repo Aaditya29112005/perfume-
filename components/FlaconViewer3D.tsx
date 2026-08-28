@@ -33,8 +33,8 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
     // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, 0.15, 8.5);
+    const camera = new THREE.PerspectiveCamera(30, containerWidth / containerHeight, 0.1, 1000);
+    camera.position.set(0, 0.1, 8.0);
 
     // 2. WebGL Renderer Setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -43,67 +43,61 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.1;
 
     container.appendChild(renderer.domElement);
 
-    // 3. Studio Environment Setup for Photorealistic Glass Reflections
+    // 3. Studio Environment Map - Deep Dark Background with Precision White Softbox Highlights for Specular Glints
     const envCanvas = document.createElement('canvas');
-    envCanvas.width = 512;
-    envCanvas.height = 256;
+    envCanvas.width = 1024;
+    envCanvas.height = 512;
     const envCtx = envCanvas.getContext('2d');
     if (envCtx) {
-      const grad = envCtx.createLinearGradient(0, 0, 0, 256);
-      grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.3, '#777788');
-      grad.addColorStop(0.7, '#111116');
-      grad.addColorStop(1, '#050508');
-      envCtx.fillStyle = grad;
-      envCtx.fillRect(0, 0, 512, 256);
+      envCtx.fillStyle = '#020204';
+      envCtx.fillRect(0, 0, 1024, 512);
 
-      // Studio softbox highlights for sphere cap reflection
+      // Key Softbox Reflection (Top Right)
       envCtx.fillStyle = '#ffffff';
       envCtx.beginPath();
-      envCtx.ellipse(380, 70, 75, 38, -Math.PI / 6, 0, Math.PI * 2);
+      envCtx.ellipse(750, 120, 110, 55, -Math.PI / 8, 0, Math.PI * 2);
       envCtx.fill();
 
+      // Rim Light Reflection (Left Edge)
+      envCtx.fillStyle = '#e5e8ff';
       envCtx.beginPath();
-      envCtx.ellipse(120, 90, 55, 28, Math.PI / 6, 0, Math.PI * 2);
+      envCtx.ellipse(220, 180, 70, 35, Math.PI / 6, 0, Math.PI * 2);
       envCtx.fill();
     }
     const envTexture = new THREE.CanvasTexture(envCanvas);
     envTexture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = envTexture;
 
-    // 4. Studio Multi-directional Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    // 4. Multi-directional Studio Lighting (Low Ambient for Deep Pitch Black Glass)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
     scene.add(ambientLight);
 
-    // Primary Softbox Key Light (Top Right)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
-    keyLight.position.set(4, 7, 5);
+    // Primary Directional Light (Top Right)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.8);
+    keyLight.position.set(4, 6, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
-    keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
     // Specular Rim Light (Back Left)
-    const rimLight = new THREE.DirectionalLight(0xe0e8ff, 2.5);
-    rimLight.position.set(-5, 5, -4);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    rimLight.position.set(-5, 4, -4);
     scene.add(rimLight);
 
-    // Warm Ambient Fill (Bottom)
-    const fillLight = new THREE.PointLight(0xffeedd, 1.8, 12);
+    // Soft Bottom Fill Light
+    const fillLight = new THREE.PointLight(0xffffff, 0.8, 10);
     fillLight.position.set(0, -3, 4);
     scene.add(fillLight);
 
     // 5. Build 3D Flacon Master Group
     const bottleGroup = new THREE.Group();
 
-    // Exact proportions to fit the body of oad50.png
-    const bodyWidth = 2.0;
-    const bodyHeight = 2.7;
+    // Dimensions matching oad50.png flacon proportions perfectly
+    const bodyWidth = 2.05;
+    const bodyHeight = 2.75;
     const bodyDepth = 0.85;
     const cornerRadius = 0.08;
 
@@ -130,21 +124,21 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       bevelEnabled: true,
       bevelSegments: 4,
       steps: 1,
-      bevelSize: 0.03,
-      bevelThickness: 0.03,
+      bevelSize: 0.02,
+      bevelThickness: 0.02,
     };
     const bodyGeo = new THREE.ExtrudeGeometry(bodyShape, extrudeSettings);
     bodyGeo.center();
 
-    // Jet Black Obsidian Glass Material
+    // Deep Pitch Black Obsidian Glass Material (Pure Black `#010103`)
     const obsidianGlassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x070709,
-      roughness: 0.03,
-      metalness: 0.15,
+      color: 0x010103,
+      roughness: 0.02,
+      metalness: 0.1,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.015,
-      reflectivity: 0.95,
-      envMapIntensity: 1.4,
+      clearcoatRoughness: 0.01,
+      reflectivity: 1.0,
+      envMapIntensity: 1.5,
     });
 
     const bodyMesh = new THREE.Mesh(bodyGeo, obsidianGlassMaterial);
@@ -153,45 +147,41 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     bodyMesh.receiveShadow = true;
     bottleGroup.add(bodyMesh);
 
-    // B. Atomizer Neck Collar (Black Obsidian Cylinder)
+    // B. Sleek Short Atomizer Neck Collar (Black Obsidian Cylinder)
     const neckRadiusTop = 0.22;
     const neckRadiusBottom = 0.24;
-    const neckHeight = 0.28;
+    const neckHeight = 0.22;
     const neckGeo = new THREE.CylinderGeometry(neckRadiusTop, neckRadiusBottom, neckHeight, 32);
     const neckMesh = new THREE.Mesh(neckGeo, obsidianGlassMaterial);
-    neckMesh.position.y = bodyMesh.position.y + bodyHeight / 2 + neckHeight / 2 + 0.02;
+    neckMesh.position.y = bodyMesh.position.y + bodyHeight / 2 + neckHeight / 2 + 0.01;
     bottleGroup.add(neckMesh);
 
-    // C. 3D Spherical Cap (Polished Black Onyx / Glossy Glass Sphere)
-    const capRadius = 0.65;
+    // C. 3D Glossy Black Sphere Cap (Rests snugly on top of neck collar)
+    const capRadius = 0.64;
     const capSphereGeo = new THREE.SphereGeometry(capRadius, 64, 64);
     const capMesh = new THREE.Mesh(capSphereGeo, obsidianGlassMaterial);
-    capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius - 0.04;
+    capMesh.position.y = neckMesh.position.y + neckHeight / 2 + capRadius * 0.72;
     capMesh.castShadow = true;
     bottleGroup.add(capMesh);
 
-    // D. Load & Crop original PNG image (e.g., oad50.png) for authentic front face fitting
-    const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.96, bodyHeight * 0.96);
+    // D. Front Face Material / Texture (Covers 100% of the front face seamlessly)
+    const frontPlaneGeo = new THREE.PlaneGeometry(bodyWidth * 0.99, bodyHeight * 0.99);
     const frontPlaneMat = new THREE.MeshBasicMaterial({
       transparent: true,
       depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1,
     });
     const frontPlaneMesh = new THREE.Mesh(frontPlaneGeo, frontPlaneMat);
-    frontPlaneMesh.position.set(0, bodyMesh.position.y, bodyDepth / 2 + 0.032);
+    frontPlaneMesh.position.set(0, bodyMesh.position.y, bodyDepth / 2 + 0.021);
     bottleGroup.add(frontPlaneMesh);
 
-    // Load actual image from imageSrc (e.g. oad50.png) and crop body region automatically
+    // Load actual PNG image (oad50.png) & crop body portion to map seamlessly onto front face
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     img.src = imageSrc;
     img.onload = () => {
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
-      
-      // Calculate crop area: if full bottle PNG (like oad50.png with ratio > 1.5), crop lower 65% containing bottle body
+
       const isFullBottle = img.height / img.width > 1.4;
       const cropYStart = isFullBottle ? Math.floor(img.height * 0.34) : 0;
       const cropHeight = img.height - cropYStart;
@@ -199,7 +189,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       canvas.height = cropHeight;
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        // Draw cropped body portion from actual image file
         ctx.drawImage(img, 0, cropYStart, img.width, cropHeight, 0, 0, img.width, cropHeight);
 
         const tex = new THREE.CanvasTexture(canvas);
@@ -210,7 +199,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       }
     };
 
-    // E. Extract Clean Title for Back Label
+    // E. Back Face Texture for 180° Back View
     const extractNameFromAlt = (alt: string) => {
       if (alt.includes('On A Date') || alt.includes('ON A DATE')) return 'ON A DATE';
       if (alt.includes('Heritage Oud') || alt.includes('HERITAGE OUD')) return 'HERITAGE OUD';
@@ -221,7 +210,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     };
     const titleText = extractNameFromAlt(altText);
 
-    // F. Create High-Resolution Back Label Canvas Texture (2048 x 2048) for 180° Back View
     const createBackLabelCanvas = () => {
       const canvas = document.createElement('canvas');
       canvas.width = 2048;
@@ -231,8 +219,8 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
       ctx.clearRect(0, 0, 2048, 2048);
 
-      // Matte Plaque Background
-      ctx.fillStyle = 'rgba(15, 16, 22, 0.95)';
+      // Matte Black Background
+      ctx.fillStyle = 'rgba(6, 7, 10, 0.95)';
       ctx.roundRect(150, 150, 1748, 1748, 40);
       ctx.fill();
 
@@ -294,8 +282,8 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     backTexture.colorSpace = THREE.SRGBColorSpace;
     backTexture.needsUpdate = true;
 
-    const backPlaqueWidth = bodyWidth * 0.88;
-    const backPlaqueHeight = bodyHeight * 0.78;
+    const backPlaqueWidth = bodyWidth * 0.95;
+    const backPlaqueHeight = bodyHeight * 0.95;
     const backPlaqueGeo = new THREE.PlaneGeometry(backPlaqueWidth, backPlaqueHeight);
     const backPlaqueMat = new THREE.MeshStandardMaterial({
       map: backTexture,
@@ -303,27 +291,24 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
       roughness: 0.15,
       metalness: 0.2,
       depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -1,
-      polygonOffsetUnits: -1,
     });
     const backPlaqueMesh = new THREE.Mesh(backPlaqueGeo, backPlaqueMat);
-    backPlaqueMesh.position.set(0, bodyMesh.position.y, -bodyDepth / 2 - 0.032);
-    backPlaqueMesh.rotation.y = Math.PI; // Face outwards to back
+    backPlaqueMesh.position.set(0, bodyMesh.position.y, -bodyDepth / 2 - 0.021);
+    backPlaqueMesh.rotation.y = Math.PI;
     bottleGroup.add(backPlaqueMesh);
 
     scene.add(bottleGroup);
 
-    // G. Obsidian Dark Pedestal Base
+    // F. Dark Mirror Pedestal Base
     const pedestalGeo = new THREE.CylinderGeometry(2.3, 2.4, 0.16, 64);
     const pedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x060810,
-      roughness: 0.06,
+      color: 0x020305,
+      roughness: 0.04,
       metalness: 0.95,
       envMapIntensity: 1.2,
     });
     const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestalMesh.position.y = -2.1;
+    pedestalMesh.position.y = -2.15;
     pedestalMesh.receiveShadow = true;
     scene.add(pedestalMesh);
 
@@ -332,7 +317,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     const shadowMat = new THREE.MeshBasicMaterial({
       color: 0x000000,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.8,
       side: THREE.DoubleSide,
     });
     const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
@@ -340,7 +325,7 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     shadowMesh.position.y = pedestalMesh.position.y + 0.085;
     scene.add(shadowMesh);
 
-    // 6. Smooth Pointer Drag & Touch Controls (360° rotation & tilt with Damping)
+    // 6. Smooth Controls & Rotation
     let isDragging = false;
     let previousMouseX = 0;
     let previousMouseY = 0;
@@ -398,19 +383,18 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 7. Render Animation Loop (Smooth Interp & Idle Floating Animation)
+    // 7. Render Loop
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       if (!isDragging) {
-        targetRotationY += 0.005; // Idle 360 degree rotation
+        targetRotationY += 0.005;
         targetRotationX *= 0.95;
       }
 
       bottleGroup.rotation.y += (targetRotationY - bottleGroup.rotation.y) * 0.08;
       bottleGroup.rotation.x += (targetRotationX - bottleGroup.rotation.x) * 0.08;
 
-      // Gentle levitation oscillation
       bottleGroup.position.y = Math.sin(Date.now() * 0.0018) * 0.035;
 
       renderer.render(scene, camera);
@@ -418,7 +402,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
     animate();
 
-    // Resize Handler
     const handleResize = () => {
       if (!container) return;
       const w = container.clientWidth;
@@ -449,7 +432,6 @@ export const FlaconViewer3D: React.FC<FlaconViewer3DProps> = ({
 
   return (
     <div className={`relative w-full h-full flex flex-col items-center justify-center ${className}`}>
-      {/* 3D WebGL Mount Canvas */}
       <div
         ref={mountRef}
         className="w-full h-full min-h-[460px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
